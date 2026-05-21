@@ -50,7 +50,7 @@ export function initScene3d(canvas, chambersConfig, alertRanges /*, ranges */) {
   });
 
   _scene = new Scene(_engine);
-  _scene.clearColor = new Color4(11/255, 24/255, 37/255, 1);
+  _scene.clearColor = new Color4(0.78, 0.80, 0.83, 1);
 
   _camera = new ArcRotateCamera('cam',
     Math.PI / 2,
@@ -82,14 +82,14 @@ export function initScene3d(canvas, chambersConfig, alertRanges /*, ranges */) {
 
   // Iluminación suave y difusa — sin "blanco quemado".
   const hemi = new HemisphericLight('hemi', new Vector3(0, 1, 0), _scene);
-  hemi.intensity = 0.42;
-  hemi.diffuse = new Color3(0.75, 0.82, 0.92);
-  hemi.groundColor = new Color3(0.05, 0.07, 0.10);
-  hemi.specular = new Color3(0.06, 0.10, 0.18);
+  hemi.intensity = 0.55;
+  hemi.diffuse = new Color3(0.80, 0.82, 0.85);
+  hemi.groundColor = new Color3(0.25, 0.27, 0.30);
+  hemi.specular = new Color3(0.20, 0.22, 0.26);
 
   const sun = new DirectionalLight('sun', new Vector3(-0.6, -1.6, -0.7), _scene);
-  sun.intensity = 0.68;
-  sun.diffuse = new Color3(0.88, 0.92, 0.98);
+  sun.intensity = 0.72;
+  sun.diffuse = new Color3(0.85, 0.85, 0.88);
   sun.position = new Vector3(12, 18, 10);
 
   // Sin GlowLayer — añadía un pase de blur sobre los emisivos.
@@ -180,17 +180,17 @@ function buildFloor(scene) {
 
   const ground = MeshBuilder.CreateGround('floor', { width: 36, height: 12 }, scene);
   const gm = new StandardMaterial('floorMat', scene);
-  gm.diffuseColor  = new Color3(0.06, 0.10, 0.15);
-  gm.specularColor = new Color3(0.04, 0.08, 0.16);
-  gm.emissiveColor = new Color3(0.01, 0.02, 0.04);
+  gm.diffuseColor  = new Color3(0.32, 0.34, 0.37);
+  gm.specularColor = new Color3(0.18, 0.20, 0.24);
+  gm.emissiveColor = new Color3(0.05, 0.06, 0.07);
   ground.material = gm;
   ground.position.y = 0;
 
   const platform = MeshBuilder.CreateBox('platform', { width: 30, depth: 5, height: 0.2 }, scene);
   platform.position.set(0, 0.1, 0);
   const pm = new StandardMaterial('platMat', scene);
-  pm.diffuseColor  = new Color3(0.10, 0.15, 0.22);
-  pm.specularColor = new Color3(0.20, 0.30, 0.45);
+  pm.diffuseColor  = new Color3(0.40, 0.42, 0.46);
+  pm.specularColor = new Color3(0.30, 0.32, 0.36);
   platform.material = pm;
 }
 
@@ -206,9 +206,9 @@ function buildChamber(scene, cam, x) {
   box.position.set(x, y, 0);
 
   const bodyMat = new StandardMaterial(`mat_${cam.id}`, scene);
-  bodyMat.diffuseColor  = new Color3(0.22, 0.22, 0.24);
-  bodyMat.specularColor = new Color3(0.20, 0.30, 0.45);
-  bodyMat.emissiveColor = new Color3(0.02, 0.03, 0.04);
+  bodyMat.diffuseColor  = new Color3(0.60, 0.62, 0.65);
+  bodyMat.specularColor = new Color3(0.30, 0.32, 0.36);
+  bodyMat.emissiveColor = new Color3(0.06, 0.07, 0.08);
   box.material = bodyMat;
 
   // Marco perimetral superior tipo "puerta de cámara".
@@ -216,9 +216,9 @@ function buildChamber(scene, cam, x) {
     { width: CHAMBER_W + 0.08, height: 0.18, depth: CHAMBER_D + 0.08 }, scene);
   frame.position.set(x, CHAMBER_H + 0.25, 0);
   const frameMat = new StandardMaterial(`frameMat_${cam.id}`, scene);
-  frameMat.diffuseColor  = new Color3(0.05, 0.20, 0.38);
-  frameMat.emissiveColor = new Color3(0.02, 0.08, 0.18);
-  frameMat.specularColor = new Color3(0.20, 0.30, 0.45);
+  frameMat.diffuseColor  = new Color3(0.18, 0.50, 0.85);
+  frameMat.emissiveColor = new Color3(0.04, 0.12, 0.24);
+  frameMat.specularColor = new Color3(0.25, 0.35, 0.50);
   frame.material = frameMat;
 
   // Puerta frontal — panel negro fijo, no participa del heatmap.
@@ -257,8 +257,8 @@ function buildChamber(scene, cam, x) {
   compPipeMat.emissiveColor = new Color3(0.06, 0.07, 0.08);
 
   const compEboxMat = new StandardMaterial(`compEboxMat_${cam.id}`, scene);
-  compEboxMat.diffuseColor  = new Color3(0.16, 0.18, 0.22);
-  compEboxMat.specularColor = new Color3(0.30, 0.32, 0.36);
+  compEboxMat.diffuseColor  = new Color3(0.35, 0.38, 0.42);
+  compEboxMat.specularColor = new Color3(0.40, 0.42, 0.46);
 
   const cx = x + CHAMBER_W / 2 + 0.55;     // centro del compresor en X
   const cy = y - CHAMBER_H * 0.32;          // altura sobre el piso
@@ -496,9 +496,9 @@ function buildPipeSegment(scene, xa, xb, active) {
     mat.emissiveColor = new Color3(0.02, 0.20, 0.15);
     mat.specularColor = new Color3(0.30, 0.45, 0.40);
   } else {
-    mat.diffuseColor  = new Color3(0.26, 0.30, 0.34);       // gris steel
-    mat.emissiveColor = new Color3(0.03, 0.04, 0.05);
-    mat.specularColor = new Color3(0.15, 0.15, 0.18);
+    mat.diffuseColor  = new Color3(0.45, 0.48, 0.52);       // gris steel claro
+    mat.emissiveColor = new Color3(0.06, 0.07, 0.08);
+    mat.specularColor = new Color3(0.22, 0.22, 0.26);
   }
 
   const yTop = PIPE_Y;
@@ -556,13 +556,13 @@ function paintLabel(entry, cam) {
   }
 
   // Fondo.
-  ctx.fillStyle = 'rgba(11,24,37,0.92)';
+  ctx.fillStyle = 'rgba(237,241,245,0.95)';
   roundRect(ctx, 8, 8, W - 16, H - 16, 16);
   ctx.fill();
 
   // Borde según estado.
   let borderColor = '#00539F';
-  if (!cam.enabled)          borderColor = '#5A6B7A';
+  if (!cam.enabled)          borderColor = '#94A3B8';
   if (alertState === 'high') borderColor = '#FF4B4B';
   if (alertState === 'low')  borderColor = '#F5A623';
   ctx.strokeStyle = borderColor;
@@ -571,7 +571,7 @@ function paintLabel(entry, cam) {
   ctx.stroke();
 
   // Etiqueta CÁMARA N.
-  ctx.fillStyle = cam.enabled ? '#E3F1FF' : '#8B9DAE';
+  ctx.fillStyle = cam.enabled ? '#475569' : '#94A3B8';
   ctx.font = 'bold 38px "Rajdhani","Segoe UI",sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
@@ -581,7 +581,7 @@ function paintLabel(entry, cam) {
   // el heatmap está en humedad). El otro indicador (temp o hum) pasa abajo.
   const mainColor = alertState === 'high' ? '#FF4B4B'
                   : alertState === 'low'  ? '#F5A623'
-                  : (cam.enabled ? '#E3F1FF' : '#5A6B7A');
+                  : (cam.enabled ? '#0F172A' : '#94A3B8');
 
   let mainText;
   if (_heatmapMode === 'hum') {
@@ -594,7 +594,7 @@ function paintLabel(entry, cam) {
   ctx.fillText(mainText, W / 2, 78);
 
   // Separador.
-  ctx.strokeStyle = 'rgba(0,83,159,0.45)';
+  ctx.strokeStyle = 'rgba(0,83,159,0.20)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(40, 200); ctx.lineTo(W - 40, 200); ctx.stroke();
@@ -605,17 +605,17 @@ function paintLabel(entry, cam) {
   let leftText, leftColor;
   if (_heatmapMode === 'hum') {
     leftText = cam.temp ? `TMP ${cam.temp.value.toFixed(1)}°C` : 'TMP --';
-    leftColor = cam.enabled ? '#E3F1FF' : '#5A6B7A';
+    leftColor = cam.enabled ? '#0F172A' : '#94A3B8';
   } else {
     leftText = cam.hum ? `HUM ${cam.hum.value.toFixed(0)}%` : 'HUM --';
-    leftColor = cam.enabled ? '#5BB8F5' : '#5A6B7A';
+    leftColor = cam.enabled ? '#2E80D8' : '#94A3B8';
   }
   ctx.fillStyle = leftColor;
   ctx.fillText(leftText, 50, 220);
 
   // kW siempre en la derecha.
   ctx.textAlign = 'right';
-  ctx.fillStyle = cam.enabled ? '#F5A623' : '#5A6B7A';
+  ctx.fillStyle = cam.enabled ? '#D97706' : '#94A3B8';
   const kwText = cam.power ? `${cam.power.value.toFixed(1)} kW` : '-- kW';
   ctx.fillText(kwText, W - 50, 220);
 
@@ -656,11 +656,11 @@ export function applySnapshot3d(snapshot) {
         entry.frameMat.emissiveColor.set(r * 0.18, g * 0.18, b * 0.18);
       }
     } else {
-      entry.bodyMat.diffuseColor.set(0.18, 0.20, 0.22);
-      entry.bodyMat.emissiveColor.set(0.01, 0.02, 0.03);
+      entry.bodyMat.diffuseColor.set(0.55, 0.58, 0.62);
+      entry.bodyMat.emissiveColor.set(0.06, 0.07, 0.08);
       if (entry.frameMat) {
-        entry.frameMat.diffuseColor.set(0.05, 0.20, 0.38);
-        entry.frameMat.emissiveColor.set(0.02, 0.08, 0.18);
+        entry.frameMat.diffuseColor.set(0.40, 0.44, 0.50);
+        entry.frameMat.emissiveColor.set(0.06, 0.08, 0.10);
       }
     }
 

@@ -156,7 +156,7 @@
   cursor: pointer;
   animation: andonPulse 1.5s ease-in-out infinite;
 }
-.alarm-andon-btn:hover { background: var(--c-cyan); }
+.alarm-andon-btn:hover { background: var(--c-blue-2); }
 @keyframes andonPulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(245,166,35,0.5); }
   50%      { box-shadow: 0 0 0 8px rgba(245,166,35,0); }
@@ -240,7 +240,7 @@
   min-height: 380px;
   border-radius: var(--r-sm);
   border: 1px solid var(--c-border-dim);
-  background: rgba(11,24,37,0.55);
+  background: var(--c-surface);
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -279,12 +279,12 @@
   padding: 5px 9px;
   border-radius: var(--r-sm);
   cursor: pointer;
-  color-scheme: dark;
+  color-scheme: light;
 }
 .report-date input[type="date"]:focus {
   outline: none;
-  border-color: var(--c-cyan);
-  box-shadow: 0 0 0 3px rgba(91,184,245,0.18);
+  border-color: var(--c-blue-2);
+  box-shadow: 0 0 0 3px rgba(46,128,216,0.18);
 }
 
 .report-card {
@@ -319,7 +319,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-  color: var(--c-cyan);
+  color: var(--c-blue-2);
   flex-shrink: 0;
 }
 
@@ -340,7 +340,7 @@
 .report-btn {
   background: transparent;
   border: 1px solid var(--c-border-hi);
-  color: var(--c-cyan);
+  color: var(--c-blue-2);
   padding: 7px 12px;
   font-family: var(--font-ui);
   font-size: 0.72rem;
@@ -353,7 +353,7 @@
 }
 .report-btn:hover {
   background: rgba(46,128,216,0.15);
-  border-color: var(--c-cyan);
+  border-color: var(--c-blue-2);
 }
 .report-btn.primary {
   background: linear-gradient(135deg, var(--c-blue) 0%, var(--c-blue-2) 100%);
@@ -471,8 +471,8 @@
 }
 .config-field input:focus {
   outline: none;
-  border-color: var(--c-cyan);
-  box-shadow: 0 0 0 3px rgba(91,184,245,0.18);
+  border-color: var(--c-blue-2);
+  box-shadow: 0 0 0 3px rgba(46,128,216,0.18);
 }
 .config-field input.is-min   { border-left: 3px solid var(--c-cyan); }
 .config-field input.is-ideal { border-left: 3px solid var(--c-green); }
@@ -489,7 +489,7 @@
   padding: 10px 14px;
   font-size: 0.78rem;
   color: var(--c-ice);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
   z-index: 200;
   animation: toastIn 200ms ease;
 }

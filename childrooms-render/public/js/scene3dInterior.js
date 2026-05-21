@@ -61,7 +61,7 @@ export function initScene3dInterior(canvas, chambersConfig) {
   });
 
   _scene = new Scene(_engine);
-  _scene.clearColor = new Color4(11/255, 24/255, 37/255, 1);
+  _scene.clearColor = new Color4(0.78, 0.80, 0.83, 1);
 
   // Cámara: posicionada en la "puerta" (frente, z negativo) mirando al fondo.
   _camera = new ArcRotateCamera('camInterior',
@@ -86,16 +86,16 @@ export function initScene3dInterior(canvas, chambersConfig) {
 
   // Iluminación: hemi neutra + 2 spots LED desde el techo.
   const hemi = new HemisphericLight('hemi', new Vector3(0, 1, 0), _scene);
-  hemi.intensity = 0.55;
-  hemi.diffuse = new Color3(0.82, 0.88, 0.96);
-  hemi.groundColor = new Color3(0.08, 0.12, 0.18);
+  hemi.intensity = 0.65;
+  hemi.diffuse = new Color3(0.80, 0.82, 0.85);
+  hemi.groundColor = new Color3(0.25, 0.27, 0.30);
 
   const led1 = new PointLight('led1', new Vector3(-2.0, ROOM_H - 0.3,  1.0), _scene);
-  led1.intensity = 0.45;
-  led1.diffuse = new Color3(0.85, 0.93, 1.0);
+  led1.intensity = 0.40;
+  led1.diffuse = new Color3(0.88, 0.90, 0.95);
   const led2 = new PointLight('led2', new Vector3( 2.0, ROOM_H - 0.3, -1.5), _scene);
-  led2.intensity = 0.45;
-  led2.diffuse = new Color3(0.85, 0.93, 1.0);
+  led2.intensity = 0.40;
+  led2.diffuse = new Color3(0.88, 0.90, 0.95);
 
   buildRoom(_scene);
   buildEvaporators(_scene);
@@ -130,9 +130,9 @@ function buildRoom(scene) {
   const floorMat = new StandardMaterial('floorMatInt', scene);
   const tileTex = new DynamicTexture('tileTex', { width: 512, height: 512 }, scene, false);
   const tctx = tileTex.getContext();
-  tctx.fillStyle = '#1B2A3A';
+  tctx.fillStyle = '#B8BFC8';
   tctx.fillRect(0, 0, 512, 512);
-  tctx.strokeStyle = 'rgba(80,110,140,0.45)';
+  tctx.strokeStyle = 'rgba(150,160,180,0.55)';
   tctx.lineWidth = 1.5;
   for (let i = 0; i <= 8; i++) {
     const p = (i / 8) * 512;
@@ -146,15 +146,15 @@ function buildRoom(scene) {
   tileTex.wrapV = Texture.WRAP_ADDRESSMODE;
   tileTex.uScale = 3; tileTex.vScale = 2;
   floorMat.diffuseTexture = tileTex;
-  floorMat.specularColor = new Color3(0.18, 0.22, 0.30);
-  floorMat.emissiveColor = new Color3(0.04, 0.05, 0.07);
+  floorMat.specularColor = new Color3(0.30, 0.32, 0.36);
+  floorMat.emissiveColor = new Color3(0.10, 0.11, 0.12);
   floor.material = floorMat;
 
   // Drain de desagüe (rejilla metálica) cerca del frente, off-center.
   const drainMat = new StandardMaterial('drainMat', scene);
-  drainMat.diffuseColor  = new Color3(0.20, 0.22, 0.26);
-  drainMat.specularColor = new Color3(0.60, 0.65, 0.72);
-  drainMat.emissiveColor = new Color3(0.05, 0.06, 0.08);
+  drainMat.diffuseColor  = new Color3(0.45, 0.48, 0.54);
+  drainMat.specularColor = new Color3(0.65, 0.68, 0.74);
+  drainMat.emissiveColor = new Color3(0.08, 0.09, 0.10);
   const drain = MeshBuilder.CreateBox('drain', { width: 0.55, height: 0.02, depth: 0.55 }, scene);
   drain.position.set(2.6, 0.011, -ROOM_D / 2 + 0.9);
   drain.material = drainMat;
@@ -167,9 +167,9 @@ function buildRoom(scene) {
 
   // ── Material de paredes: blanco-azulado mate (paneles aislantes) ──────
   const wallMat = new StandardMaterial('wallMatInt', scene);
-  wallMat.diffuseColor  = new Color3(0.78, 0.84, 0.90);
-  wallMat.specularColor = new Color3(0.20, 0.25, 0.32);
-  wallMat.emissiveColor = new Color3(0.08, 0.10, 0.12);
+  wallMat.diffuseColor  = new Color3(0.88, 0.90, 0.94);
+  wallMat.specularColor = new Color3(0.25, 0.28, 0.34);
+  wallMat.emissiveColor = new Color3(0.10, 0.12, 0.14);
   wallMat.backFaceCulling = false;
 
   // Pared del fondo, izquierda, derecha.
@@ -193,18 +193,18 @@ function buildRoom(scene) {
   ceil.position.set(0, ROOM_H, 0);
   ceil.rotation.x = -Math.PI / 2;
   const ceilMat = new StandardMaterial('ceilMatInt', scene);
-  ceilMat.diffuseColor  = new Color3(0.62, 0.68, 0.76);
-  ceilMat.specularColor = new Color3(0.10, 0.12, 0.16);
-  ceilMat.emissiveColor = new Color3(0.06, 0.08, 0.10);
+  ceilMat.diffuseColor  = new Color3(0.80, 0.82, 0.86);
+  ceilMat.specularColor = new Color3(0.18, 0.20, 0.24);
+  ceilMat.emissiveColor = new Color3(0.10, 0.12, 0.14);
   ceil.material = ceilMat;
 
   // ── Bandas verticales de unión de paneles modulares ────────────────────
   // Tono azul-acero más oscuro que la pared, sugiere las juntas verticales
   // entre paneles aislantes (PIR / poliuretano) de una cámara frigorífica.
   const seamMat = new StandardMaterial('seamMat', scene);
-  seamMat.diffuseColor  = new Color3(0.32, 0.40, 0.50);
-  seamMat.specularColor = new Color3(0.45, 0.50, 0.55);
-  seamMat.emissiveColor = new Color3(0.04, 0.05, 0.06);
+  seamMat.diffuseColor  = new Color3(0.60, 0.64, 0.70);
+  seamMat.specularColor = new Color3(0.55, 0.58, 0.62);
+  seamMat.emissiveColor = new Color3(0.08, 0.09, 0.10);
 
   const SEAM_W = 0.05, SEAM_THICK = 0.02;
   // Paredes laterales: 4 juntas distribuidas en Z.
@@ -259,12 +259,12 @@ function buildRoom(scene) {
   // Etiqueta superior con número de cámara — DynamicTexture
   const labelTex = new DynamicTexture('lintelLabel', { width: 1024, height: 128 }, scene, false);
   const lctx = labelTex.getContext();
-  lctx.fillStyle = '#0B1825';
+  lctx.fillStyle = '#EDF1F5';
   lctx.fillRect(0, 0, 1024, 128);
-  lctx.fillStyle = '#00C896';
+  lctx.fillStyle = '#00539F';
   lctx.fillRect(0, 0, 1024, 6);
   lctx.fillRect(0, 122, 1024, 6);
-  lctx.fillStyle = '#E3F1FF';
+  lctx.fillStyle = '#0F172A';
   lctx.font = 'bold 64px "Rajdhani","Arial",sans-serif';
   lctx.textAlign = 'center';
   lctx.textBaseline = 'middle';
@@ -273,7 +273,7 @@ function buildRoom(scene) {
 
   const labelMat = new StandardMaterial('lintelLabelMat', scene);
   labelMat.diffuseTexture = labelTex;
-  labelMat.emissiveColor  = new Color3(0.55, 0.65, 0.80);
+  labelMat.emissiveColor  = new Color3(0.20, 0.24, 0.30);
   labelMat.specularColor  = new Color3(0.10, 0.12, 0.16);
   const labelPlane = MeshBuilder.CreatePlane('lintelLabelPlane',
     { width: ROOM_W - 0.6, height: 0.30 }, scene);
@@ -315,9 +315,9 @@ function buildEvaporators(scene) {
   housingMat.emissiveColor = new Color3(0.10, 0.12, 0.16);
 
   const grilleMat = new StandardMaterial('evapGrilleMat', scene);
-  grilleMat.diffuseColor  = new Color3(0.12, 0.16, 0.22);
-  grilleMat.specularColor = new Color3(0.30, 0.32, 0.36);
-  grilleMat.emissiveColor = new Color3(0.04, 0.05, 0.07);
+  grilleMat.diffuseColor  = new Color3(0.38, 0.42, 0.48);
+  grilleMat.specularColor = new Color3(0.40, 0.44, 0.50);
+  grilleMat.emissiveColor = new Color3(0.07, 0.08, 0.10);
 
   const fanMat = new StandardMaterial('evapFanMat', scene);
   fanMat.diffuseColor  = new Color3(0.36, 0.42, 0.50);

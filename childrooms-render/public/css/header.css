@@ -13,7 +13,7 @@
   padding: 0 16px;
   background: linear-gradient(180deg, var(--c-surface-2) 0%, var(--c-surface) 100%);
   border-bottom: 1px solid var(--c-border-hi);
-  box-shadow: 0 1px 0 rgba(46,128,216,0.20), 0 4px 18px rgba(0,0,0,0.30);
+  box-shadow: 0 1px 0 rgba(46,128,216,0.15), 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .header-left {
@@ -47,7 +47,7 @@
   user-select: none;
   margin-top: 1px;
 }
-.plant-name:hover { color: var(--c-cyan); }
+.plant-name:hover { color: var(--c-blue-2); }
 
 .header-right {
   display: flex;
@@ -174,7 +174,7 @@
   background: var(--c-surface-2);
   border: 1px solid var(--c-border-hi);
   border-radius: var(--r-md);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.50);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
   padding: 6px;
   display: none;
   z-index: 100;

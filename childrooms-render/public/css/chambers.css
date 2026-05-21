@@ -25,7 +25,7 @@
   border: 1px solid var(--c-border-dim);
   border-radius: 999px;
   overflow: hidden;
-  background: rgba(11,24,37,0.55);
+  background: var(--c-surface-2);
   height: 26px;
 }
 .heatmap-mode {
@@ -40,7 +40,7 @@
   cursor: pointer;
   transition: background 200ms, color 200ms;
 }
-.heatmap-mode:hover { color: var(--c-cyan); }
+.heatmap-mode:hover { color: var(--c-blue-2); }
 .heatmap-mode.active {
   background: var(--c-blue);
   color: var(--c-ice);
@@ -59,7 +59,7 @@
   justify-content: center;
   transition: all 200ms;
 }
-.rot-toggle:hover { border-color: var(--c-cyan); color: var(--c-cyan); }
+.rot-toggle:hover { border-color: var(--c-blue-2); color: var(--c-blue-2); }
 .rot-toggle.active {
   border-color: var(--c-green);
   color: var(--c-green);
@@ -216,14 +216,14 @@
 }
 .status-panel.is-clickable { cursor: pointer; }
 .status-panel.is-clickable:hover {
-  border-color: var(--c-cyan);
+  border-color: var(--c-blue-2);
   transform: translateY(-1px);
   box-shadow: 0 4px 14px rgba(46,128,216,0.20);
 }
 .status-panel.is-clickable:focus-visible {
   outline: none;
-  border-color: var(--c-cyan);
-  box-shadow: 0 0 0 3px rgba(91,184,245,0.30);
+  border-color: var(--c-blue-2);
+  box-shadow: 0 0 0 3px rgba(46,128,216,0.25);
 }
 .status-panel.is-clickable:active { transform: translateY(0); }
 
@@ -260,7 +260,7 @@
   align-items: center;
   gap: 3px;
   padding: 5px 4px;
-  background: rgba(11,24,37,0.45);
+  background: var(--c-surface-2);
   border-radius: var(--r-sm);
   border: 1px solid var(--c-border-dim);
   transition: border-color 220ms, background 220ms, box-shadow 220ms;

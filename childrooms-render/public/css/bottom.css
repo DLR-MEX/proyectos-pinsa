@@ -45,7 +45,7 @@
 .trend-tooltip {
   display: none;
   position: absolute;
-  background: rgba(11,24,37,0.95);
+  background: var(--c-surface);
   border: 1px solid var(--c-border-hi);
   border-radius: var(--r-sm);
   padding: 6px 8px;
@@ -55,12 +55,12 @@
   pointer-events: none;
   z-index: 10;
   min-width: 130px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.55);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
 }
 .trend-tooltip-time {
   font-weight: 700;
   font-size: 0.66rem;
-  color: var(--c-cyan);
+  color: var(--c-blue-2);
   letter-spacing: 0.5px;
   margin-bottom: 4px;
   padding-bottom: 3px;
