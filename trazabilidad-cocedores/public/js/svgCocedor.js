@@ -3,17 +3,17 @@
 // Modo "interior": vista frontal con charolas apiladas (16 por carrito).
 
 const COL = {
-  bodyTop:    '#2A4660',
-  bodyBot:    '#0F1C2C',
-  rim:        '#4F7CA8',
-  rimHi:      '#8FB6DD',
-  cavity:     '#06101A',
-  rail:       '#2B3D52',
-  cart:       '#7A8FA5',
-  cartHi:     '#B6C7DA',
-  shelf:      '#2E80D8',
+  bodyTop:    '#7A8288',
+  bodyBot:    '#4A5056',
+  rim:        '#94A3B8',
+  rimHi:      '#CBD5E1',
+  cavity:     '#E2E8F0',
+  rail:       '#64748B',
+  cart:       '#94A3B8',
+  cartHi:     '#CBD5E1',
+  shelf:      '#00539F',
   shelfHot:   '#F5A623',
-  ground:     '#0A1320',
+  ground:     '#CBD5E1',
 };
 
 /**
@@ -28,7 +28,7 @@ export function svgCocedorExterior({ state = 'ESPERA', carritos = 0, selected = 
   const dim = state === 'DESACTIVADO' || state === 'MANTENIMIENTO';
   const opacity = dim ? 0.5 : 1;
   const glow = hot ? `<filter id="g1"><feGaussianBlur stdDeviation="2"/></filter>` : '';
-  const innerColor = hot ? '#F5A623' : (state === 'LISTO' ? '#00C896' : '#1B3553');
+  const innerColor = hot ? '#F5A623' : (state === 'LISTO' ? '#00C896' : '#64748B');
 
   // Carritos asomando por la apertura (máx 2 visibles, el resto sobreentendido).
   const visibleCarritos = Math.min(carritos, 2);
@@ -127,7 +127,7 @@ export function svgCocedorInterior({ state = 'ESPERA', carritos = 0 } = {}) {
 <svg class="interna-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
   <!-- Marco cilíndrico vista frontal -->
   <rect x="4" y="8" width="56" height="50" rx="6" fill="${innerColor}" stroke="#4F7CA8" stroke-width="1"/>
-  <rect x="6" y="10" width="52" height="46" rx="5" fill="#06101A" stroke="#2B3D52" stroke-width="0.5"/>
+  <rect x="6" y="10" width="52" height="46" rx="5" fill="#E2E8F0" stroke="#64748B" stroke-width="0.5"/>
   <!-- Riel inferior -->
   <line x1="6" y1="56" x2="58" y2="56" stroke="#2B3D52" stroke-width="0.6"/>
   ${cartCells}
@@ -158,7 +158,7 @@ export function svgCarritoMini() {
   <line x1="16" y1="26" x2="44" y2="26" stroke="#B6C7DA" stroke-width="0.5"/>
   <line x1="16" y1="34" x2="44" y2="34" stroke="#B6C7DA" stroke-width="0.5"/>
   <line x1="16" y1="42" x2="44" y2="42" stroke="#B6C7DA" stroke-width="0.5"/>
-  <circle cx="18" cy="54" r="2" fill="#0F1C2C"/>
-  <circle cx="42" cy="54" r="2" fill="#0F1C2C"/>
+  <circle cx="18" cy="54" r="2" fill="#4A5056"/>
+  <circle cx="42" cy="54" r="2" fill="#4A5056"/>
 </svg>`;
 }

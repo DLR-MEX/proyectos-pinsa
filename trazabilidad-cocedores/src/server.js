@@ -70,6 +70,14 @@ export function startServer() {
   const limiterWrite = rateLimit({ windowMs: 60_000, max: RATE_WRITE_PER_MIN, standardHeaders: true });
 
   // ── Estáticos ──────────────────────────────────────────────────────────
+  // JS y GLB sin caché para que los cambios lleguen inmediatamente al browser.
+  app.use('/js', express.static(path.join(PUBLIC_DIR, 'js'), {
+    etag: false, maxAge: 0, index: false,
+    setHeaders: (res) => res.setHeader('Cache-Control', 'no-store'),
+  }));
+  app.use('/images', express.static(path.join(PUBLIC_DIR, 'images'), {
+    etag: true, maxAge: '1d', index: false,
+  }));
   app.use(express.static(PUBLIC_DIR, {
     etag: true,
     maxAge: '1h',
