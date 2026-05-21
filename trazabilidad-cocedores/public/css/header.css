@@ -1,0 +1,132 @@
+/* Header del sistema — rebrand "Trazabilidad NFC — Cocedores" */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--h-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: linear-gradient(180deg, var(--c-surface-2) 0%, var(--c-surface) 100%);
+  border-bottom: 1px solid var(--c-border-hi);
+  box-shadow: 0 1px 0 rgba(46,128,216,0.20), 0 4px 18px rgba(0,0,0,0.30);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pinsa-logo {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-blue) 0%, var(--c-blue-2) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  box-shadow: 0 0 12px rgba(0,83,159,0.55);
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.system-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: var(--c-ice);
+  white-space: nowrap;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  color: var(--c-green);
+  text-transform: uppercase;
+}
+.live-badge .connection-dot { width: 8px; height: 8px; }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-clock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--c-text-mid);
+  font-family: var(--font-data);
+  font-size: 0.80rem;
+  letter-spacing: 1px;
+}
+.header-clock-icon {
+  color: var(--c-cyan);
+  font-size: 0.95rem;
+}
+
+.operario-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px 4px 4px;
+  border: 1px solid var(--c-border-hi);
+  border-radius: 18px;
+  background: rgba(46,128,216,0.06);
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-blue) 0%, var(--c-blue-2) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.86rem;
+  color: white;
+}
+
+.operario-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+.operario-label {
+  font-size: 0.58rem;
+  letter-spacing: 1.2px;
+  color: var(--c-text-dim);
+  text-transform: uppercase;
+}
+.operario-name {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--c-ice);
+}
+
+@media (max-width: 900px) {
+  .system-title { font-size: 0.78rem; letter-spacing: 1.4px; }
+  .live-badge   { display: none; }
+  .header-clock { font-size: 0.66rem; }
+  .operario-label { display: none; }
+}

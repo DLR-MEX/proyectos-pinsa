@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0B1825">
+  <title>PINSA · Trazabilidad NFC — Cocedores</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="/css/variables.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/header.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/sidebar.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/dashboard.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/views.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/detalleCocedor.css?v=__BUILD_VERSION__">
+
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+</head>
+<body>
+
+  <!-- ─── HEADER ─────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <div class="pinsa-logo" aria-label="PINSA">P</div>
+      <div class="brand-title">
+        <h1 class="system-title">Trazabilidad NFC — Cocedores</h1>
+        <span class="live-badge">
+          <span class="connection-dot ok" id="conn-dot"></span>
+          <span id="conn-label">En tiempo real</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="header-clock">
+        <span class="header-clock-icon">◷</span>
+        <span id="header-date">--/--/----</span>
+        <span id="header-time">--:--:--</span>
+      </div>
+
+      <div class="operario-chip">
+        <span class="user-avatar">👤</span>
+        <div class="operario-meta">
+          <span class="operario-label">Operario</span>
+          <span class="operario-name" id="operario-name">LUIS R.</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── APP SHELL ──────────────────────────────────────────────────────── -->
+  <div class="app-shell" role="application" aria-label="Trazabilidad NFC PINSA">
+
+    <!-- ─── SIDEBAR ──────────────────────────────────────────────────────── -->
+    <nav class="sidebar" aria-label="Navegación principal">
+      <ul class="sidebar-nav" id="sidebar-nav"></ul>
+      <div class="sidebar-footer">
+        <div class="pinsa-mini">P</div>
+        <span class="v-tag"><strong>PINSA</strong><br>v1.0.0</span>
+      </div>
+    </nav>
+
+    <!-- ─── CONTENT AREA ─────────────────────────────────────────────────── -->
+    <main class="content-area">
+
+      <!-- ═════════════════════ VISTA: DASHBOARD ═════════════════════ -->
+      <section class="view dashboard" data-view="dashboard" id="view-dashboard">
+
+        <div class="dash-col-main">
+          <section class="kpi-bar" id="kpi-bar"></section>
+
+          <section class="panel panel-cocedores">
+            <div class="panel-header">
+              <h3 class="panel-title">Cocedores en planta</h3>
+              <div class="cocedores-panel-tools">
+                <span>Arrastra para orbitar · rueda para zoom · click en un cocedor → ver interior</span>
+              </div>
+            </div>
+            <div class="cocedores-stage cocedores-stage-3d" id="cocedores-stage">
+              <canvas id="cocedores-canvas" touch-action="none"></canvas>
+              <div class="cocedores-labels" id="cocedores-labels"></div>
+              <div class="stage-loading" id="stage-loading">
+                <div class="stage-spinner"></div>
+                <div>Cargando render 3D…</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="dash-col-side">
+          <section class="panel">
+            <div class="panel-header"><h3 class="panel-title">Estado general</h3></div>
+            <div class="donut-wrap">
+              <div class="donut" id="donut">
+                <div class="donut-center">
+                  <span class="donut-center-num" id="donut-total">11</span>
+                  <span class="donut-center-label">Cocedores</span>
+                </div>
+              </div>
+              <ul class="donut-legend" id="donut-legend"></ul>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header"><h3 class="panel-title" id="detalle-title">Cocedor — Detalle</h3></div>
+            <div class="cocedor-detalle-wrap" id="detalle-wrap">
+              <div class="cocedor-detalle-render" id="detalle-render"></div>
+              <dl class="detalle-dl-mini" id="detalle-dl"></dl>
+            </div>
+          </section>
+        </div>
+
+        <section class="bottom4-row" style="grid-column: 1 / -1;">
+          <div class="panel">
+            <div class="panel-header"><h3 class="panel-title">Entrada de carritos</h3></div>
+            <div id="entrada-carrito"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><h3 class="panel-title">Cocedores — Vista interna</h3></div>
+            <div class="vista-interna-grid" id="vista-interna"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><h3 class="panel-title">Mapa de planta</h3></div>
+            <div class="mapa-planta-stage" id="mapa-planta"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><h3 class="panel-title">Últimos movimientos</h3></div>
+            <div class="movimientos-list" id="movimientos-list"></div>
+          </div>
+        </section>
+
+        <section class="bottom-final-row" style="grid-column: 1 / -1;">
+          <div class="panel">
+            <div class="panel-header"><h3 class="panel-title">KPIs del día</h3></div>
+            <div class="kpis-dia-grid" id="kpis-dia"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><h3 class="panel-title" id="trace-title">Trazabilidad del carrito —</h3></div>
+            <div class="trace-stepper" id="trace-stepper"></div>
+          </div>
+          <div class="trace-meta" id="trace-meta"></div>
+        </section>
+      </section>
+
+      <!-- ═════════════════════ VISTA: COCEDORES (lista) ═════════════════════ -->
+      <section class="view" data-view="cocedores" id="view-cocedores" style="display:none">
+        <div class="view-header">
+          <div class="view-header-left">
+            <h2 class="view-title">Cocedores</h2>
+            <span class="view-subtitle">Estado por unidad · acciones rápidas</span>
+          </div>
+        </div>
+        <div class="view-body" id="cocedores-list"></div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: CARRITOS ═════════════════════ -->
+      <section class="view" data-view="carritos" id="view-carritos" style="display:none">
+        <div class="view-header">
+          <div class="view-header-left">
+            <h2 class="view-title">Carritos</h2>
+            <span class="view-subtitle">Catálogo completo · búsqueda y filtros</span>
+          </div>
+          <div class="view-actions">
+            <input class="input" type="search" id="carritos-search" placeholder="Buscar por ID o tag NFC…" style="width:240px"/>
+            <select class="select" id="carritos-filter-etapa">
+              <option value="">Todas las etapas</option>
+              <option value="eviscerado">Eviscerado</option>
+              <option value="proceso">En proceso</option>
+              <option value="empaque">Empaque</option>
+            </select>
+          </div>
+        </div>
+        <div class="view-body" id="carritos-body"></div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: ALERTAS ═════════════════════ -->
+      <section class="view" data-view="alertas" id="view-alertas" style="display:none">
+        <div class="view-header">
+          <div class="view-header-left">
+            <h2 class="view-title">Alertas</h2>
+            <span class="view-subtitle">Andon — activas e histórico</span>
+          </div>
+        </div>
+        <div class="tabs" id="alertas-tabs">
+          <button class="tab active" data-alertas-tab="activas">Activas <span id="alertas-count">0</span></button>
+          <button class="tab" data-alertas-tab="historico">Histórico</button>
+        </div>
+        <div class="view-body" id="alertas-body"></div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: REPORTES ═════════════════════ -->
+      <section class="view" data-view="reportes" id="view-reportes" style="display:none">
+        <div class="view-header">
+          <div class="view-header-left">
+            <h2 class="view-title">Reportes</h2>
+            <span class="view-subtitle">Descarga el histórico en CSV</span>
+          </div>
+          <div class="view-actions">
+            <label class="view-subtitle">Desde
+              <input class="input" type="date" id="report-from" style="margin-left:6px"/></label>
+            <label class="view-subtitle">Hasta
+              <input class="input" type="date" id="report-to" style="margin-left:6px"/></label>
+            <button class="btn subtle" id="report-clear">Limpiar</button>
+          </div>
+        </div>
+        <div class="view-body" id="reportes-body"></div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: TRAZABILIDAD ═════════════════════ -->
+      <section class="view" data-view="trazabilidad" id="view-trazabilidad" style="display:none">
+        <div class="view-header">
+          <div class="view-header-left">
+            <h2 class="view-title">Trazabilidad de carrito</h2>
+            <span class="view-subtitle">Búsqueda por ID o tag NFC</span>
+          </div>
+          <div class="view-actions">
+            <input class="input" type="search" id="traza-search" placeholder="CAR-000123 o tag NFC…" style="width:260px"/>
+            <button class="btn primary" id="traza-buscar">Buscar</button>
+          </div>
+        </div>
+        <div class="view-body" id="trazabilidad-body"></div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: CONFIGURACIÓN ═════════════════════ -->
+      <section class="view" data-view="config" id="view-config" style="display:none">
+        <div class="view-header">
+          <div class="view-header-left">
+            <h2 class="view-title">Configuración de recetas</h2>
+            <span class="view-subtitle">Setpoint, duración y tolerancias por talla</span>
+          </div>
+          <div class="view-actions">
+            <button class="btn subtle" id="config-reset">Restaurar</button>
+            <button class="btn primary" id="config-save" disabled title="Edición de recetas no implementada en MVP simulado">Guardar (deshabilitado)</button>
+          </div>
+        </div>
+        <div class="view-body" id="config-body"></div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: DETALLE COCEDOR (contextual) ═════════════════════ -->
+      <section class="view" data-view="detalle-cocedor" id="view-detalle-cocedor" style="display:none">
+        <div class="view-header">
+          <div class="view-header-left">
+            <button class="btn-back" data-go-view="dashboard">← Volver</button>
+            <div>
+              <h2 class="view-title" id="detalle-coc-title">Cocedor —</h2>
+              <span class="view-subtitle" id="detalle-coc-sub">Estado · Lote · Operario</span>
+            </div>
+          </div>
+          <div class="view-actions">
+            <select class="detalle-cam-selector" id="detalle-coc-select" aria-label="Cambiar cocedor"></select>
+          </div>
+        </div>
+
+        <div class="detalle-grid">
+          <div class="detalle-stage">
+            <div class="detalle-readout" id="detalle-readout"></div>
+            <div class="detalle-hero detalle-hero-3d" id="detalle-hero">
+              <canvas id="detalle-canvas" touch-action="none"></canvas>
+            </div>
+            <div class="slots-section">
+              <div class="slots-title">
+                <span>Distribución de carritos (28 slots)</span>
+                <span id="slots-summary" style="color:var(--c-text-mid)">— / 28</span>
+              </div>
+              <div class="slots-grid" id="slots-grid"></div>
+            </div>
+          </div>
+
+          <aside class="detalle-side">
+            <section class="panel">
+              <div class="panel-head"><span class="panel-head-icon">◉</span>Información</div>
+              <dl class="detalle-info-dl" id="detalle-info-dl"></dl>
+              <div id="detalle-gauge"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head"><span class="panel-head-icon">⚙</span>Equipos</div>
+              <div class="detalle-equipos" id="detalle-equipos"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head"><span class="panel-head-icon">⚠</span>Alertas del cocedor</div>
+              <div id="detalle-alertas-mini"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="/js/app.js?v=__BUILD_VERSION__"></script>
+</body>
+</html>

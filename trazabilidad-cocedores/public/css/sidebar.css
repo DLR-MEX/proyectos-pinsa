@@ -1,0 +1,136 @@
+/* Sidebar 168 px con 7 items + footer logo PINSA mini + versión */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  height: calc(100vh - var(--h-header));
+  min-height: 0;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, var(--c-surface) 0%, var(--c-surface) 80%, var(--c-bg) 100%);
+  border-right: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 0 6px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 18px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--c-text-dim);
+  cursor: pointer;
+  position: relative;
+  transition: background 150ms, color 150ms;
+  text-transform: uppercase;
+}
+
+.sidebar-item:hover {
+  background: rgba(46,128,216,0.08);
+  color: var(--c-ice);
+}
+
+.sidebar-item.active {
+  background: linear-gradient(90deg, rgba(46,128,216,0.18) 0%, rgba(46,128,216,0.02) 100%);
+  color: var(--c-ice);
+}
+
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 6px; bottom: 6px;
+  width: 3px;
+  background: var(--c-blue-2);
+  box-shadow: 0 0 8px var(--c-blue-2);
+  border-radius: 0 2px 2px 0;
+}
+
+.sidebar-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  flex-shrink: 0;
+}
+.sidebar-icon svg { width: 18px; height: 18px; }
+
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--c-red);
+  color: white;
+  font-family: var(--font-data);
+  font-size: 0.62rem;
+  font-weight: 600;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-badge.has-alerts { display: inline-flex; }
+
+.sidebar-footer {
+  padding: 12px 18px;
+  border-top: 1px solid var(--c-border-dim);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pinsa-mini {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-blue) 0%, var(--c-blue-2) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 0.72rem;
+}
+
+.v-tag {
+  font-family: var(--font-data);
+  font-size: 0.62rem;
+  letter-spacing: 1px;
+  color: var(--c-text-dim);
+}
+.v-tag strong {
+  color: var(--c-ice);
+  font-weight: 600;
+}
+
+/* Content area */
+.content-area {
+  padding: 10px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .app-shell { grid-template-columns: 52px 1fr; }
+  .sidebar-item span:not(.sidebar-icon):not(.sidebar-badge) { display: none; }
+  .sidebar-item { padding: 10px 14px; justify-content: center; }
+  .sidebar-footer { padding: 10px 6px; }
+  .v-tag { display: none; }
+}

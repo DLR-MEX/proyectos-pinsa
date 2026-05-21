@@ -1,0 +1,360 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Vista: Detalle de cocedor (contextual)
+   Stage 3D-look del cocedor + grid 7x4 con 28 slots de carrito + panel lateral
+   ────────────────────────────────────────────────────────────────────────── */
+
+.detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--gap-grid);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.detalle-stage {
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 10%, rgba(0,83,159,0.18), transparent 70%),
+    linear-gradient(180deg, #0E1C2D 0%, #060E18 100%);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 16px;
+  box-shadow: var(--shadow-panel);
+}
+
+/* Readout flotante top-right: temperatura + tiempo restante grandes */
+.detalle-readout {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+  z-index: 4;
+}
+.readout-card {
+  min-width: 110px;
+  padding: 8px 14px;
+  background: rgba(11,24,37,0.78);
+  border: 1px solid var(--c-border-hi);
+  border-radius: var(--r-md);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.readout-label {
+  font-size: 0.56rem;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+  font-weight: 700;
+}
+.readout-value {
+  font-family: var(--font-data);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--c-ice);
+  letter-spacing: 0.5px;
+  line-height: 1.05;
+}
+.readout-value.is-hot { color: var(--c-amber); text-shadow: 0 0 10px rgba(245,166,35,0.45); }
+.readout-value.is-ok  { color: var(--c-green); text-shadow: 0 0 10px rgba(0,200,150,0.45); }
+.readout-sub {
+  font-family: var(--font-data);
+  font-size: 0.66rem;
+  color: var(--c-text-mid);
+  margin-top: 2px;
+}
+
+/* Hero render del cocedor */
+.detalle-hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+.detalle-hero-svg {
+  width: 280px;
+  height: 200px;
+  display: block;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
+}
+.detalle-hero-3d {
+  width: 100%;
+  height: 260px;
+  position: relative;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: linear-gradient(180deg, #0E1C2D 0%, #06101A 100%);
+  border: 1px solid var(--c-border-dim);
+}
+.detalle-hero-3d canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+  touch-action: none;
+}
+
+/* Grid de 28 slots: 7 columnas × 4 filas */
+.slots-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.slots-title {
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  color: var(--c-text-dim);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 6px;
+  flex: 1;
+  min-height: 200px;
+}
+.slot {
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border-dim);
+  border-radius: var(--r-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 4px;
+  position: relative;
+  gap: 2px;
+  transition: all 200ms;
+}
+.slot.empty {
+  background: repeating-linear-gradient(
+    45deg, rgba(95,107,122,0.05) 0 6px, transparent 6px 12px);
+  border-style: dashed;
+}
+.slot.filled {
+  background: linear-gradient(180deg, rgba(46,128,216,0.18) 0%, rgba(46,128,216,0.06) 100%);
+  border-color: rgba(46,128,216,0.55);
+  box-shadow: inset 0 0 10px rgba(46,128,216,0.18);
+}
+.slot.filled.hot {
+  background: linear-gradient(180deg, rgba(245,166,35,0.18) 0%, rgba(245,166,35,0.06) 100%);
+  border-color: rgba(245,166,35,0.55);
+  box-shadow: inset 0 0 10px rgba(245,166,35,0.18);
+}
+.slot.filled.ready {
+  background: linear-gradient(180deg, rgba(0,200,150,0.18) 0%, rgba(0,200,150,0.06) 100%);
+  border-color: rgba(0,200,150,0.55);
+  box-shadow: inset 0 0 10px rgba(0,200,150,0.18);
+}
+.slot-num {
+  font-family: var(--font-data);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--c-text-mid);
+  letter-spacing: 0.5px;
+  position: absolute;
+  top: 3px;
+  left: 5px;
+}
+.slot.empty .slot-num { color: var(--c-steel); }
+.slot-id {
+  font-family: var(--font-data);
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--c-ice);
+  letter-spacing: -0.3px;
+}
+.slot-talla {
+  font-family: var(--font-ui);
+  font-size: 0.54rem;
+  font-weight: 600;
+  color: var(--c-text-mid);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.slot-time {
+  font-family: var(--font-data);
+  font-size: 0.52rem;
+  color: var(--c-text-dim);
+  margin-top: 1px;
+}
+
+/* Panel lateral */
+.detalle-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-grid);
+  min-height: 0;
+  overflow-y: auto;
+}
+.detalle-side .panel { flex-shrink: 0; }
+.detalle-side .panel-head {
+  padding: 8px 14px;
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+  font-weight: 700;
+  border-bottom: 1px solid var(--c-border-dim);
+  background: var(--c-surface-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -10px -10px 8px;
+  border-radius: var(--r-md) var(--r-md) 0 0;
+}
+.panel-head-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: rgba(46,128,216,0.14);
+  border: 1px solid var(--c-border-hi);
+  border-radius: var(--r-sm);
+  font-size: 0.78rem;
+  color: var(--c-cyan);
+}
+
+/* DL info */
+.detalle-info-dl {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.detalle-info-dl > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed var(--c-border-dim);
+  font-size: 0.74rem;
+}
+.detalle-info-dl > div:last-child { border-bottom: none; padding-bottom: 0; }
+.detalle-info-dl dt { color: var(--c-text-dim); letter-spacing: 0.3px; }
+.detalle-info-dl dd { margin: 0; font-family: var(--font-data); font-weight: 600; color: var(--c-ice); }
+
+/* Gauge inline para temperatura */
+.gauge-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0 14px;
+  border-bottom: 1px dashed var(--c-border-dim);
+}
+.gauge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.gauge-header dt { color: var(--c-text-dim); font-size: 0.72rem; }
+.gauge-header dd {
+  margin: 0;
+  font-family: var(--font-data);
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: var(--c-ice);
+}
+.gauge-track {
+  position: relative;
+  height: 8px;
+  border-radius: 3px;
+  background: linear-gradient(90deg,
+    var(--c-cyan) 0%, var(--c-green) 50%, var(--c-amber) 80%, var(--c-red) 100%);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.50);
+  margin-bottom: 12px;
+}
+.gauge-needle {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 3px;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255,255,255,0.80);
+  transform: translateX(-50%);
+  transition: left 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.gauge-mark {
+  position: absolute;
+  top: 100%;
+  transform: translateX(-50%);
+  font-family: var(--font-data);
+  font-size: 0.54rem;
+  color: var(--c-text-dim);
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+/* Equipos del cocedor */
+.detalle-equipos {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.eq-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border-dim);
+  border-radius: var(--r-sm);
+}
+.eq-row.is-on { border-color: rgba(0,200,150,0.45); background: rgba(0,200,150,0.08); }
+.eq-row.is-off { border-color: rgba(245,166,35,0.30); }
+.eq-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c-steel); }
+.eq-row.is-on .eq-dot { background: var(--c-green); box-shadow: 0 0 8px rgba(0,200,150,0.65); }
+.eq-row.is-off .eq-dot { background: var(--c-amber); }
+.eq-name { font-family: var(--font-ui); color: var(--c-ice); font-size: 0.78rem; letter-spacing: 0.4px; }
+.eq-state {
+  font-family: var(--font-data);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+.eq-row.is-on  .eq-state { color: var(--c-green); }
+.eq-row.is-off .eq-state { color: var(--c-amber); }
+
+/* Selector de cocedor en header de detalle */
+.detalle-cam-selector {
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border-hi);
+  color: var(--c-ice);
+  font-family: var(--font-ui);
+  font-size: 0.80rem;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  min-width: 160px;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .detalle-grid { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+}
+@media (max-width: 700px) {
+  .slots-grid { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(7, 1fr); }
+  .detalle-hero-svg { width: 200px; height: 150px; }
+  .readout-card { min-width: 90px; padding: 6px 10px; }
+}
