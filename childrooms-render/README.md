@@ -9,11 +9,8 @@ Dashboard de **monitoreo de cámaras de refrigeración industrial** para **PINSA
 - **Modo producción** (`MOCK_DATA=false`): cliente MQTT sobre Ubidots con validación física de rangos.
 - **Render 3D** con Babylon.js: vista general de cámaras + vista detalle interior por cámara.
 
-> **Relación con otros proyectos del repositorio**:  
-> En el mismo repositorio conviven los proyectos hermanos:
-> - [`trazabilidad-cocedores`](../trazabilidad-cocedores/README.md) — Trazabilidad NFC de carritos de atún en cocedores cilíndricos (puerto **5002**).
-> - [`Malinalco-render`](../Malinalco-render/README.md) — Dashboard de refrigeración de la planta Malinalco (puerto **5000**).  
-> `childrooms-render` usa puerto **5001**.
+> **Proyecto relacionado en el repositorio**:  
+> [`trazabilidad-cocedores`](../trazabilidad-cocedores/README.md) — Dashboard de trazabilidad NFC de carritos de atún en cocedores cilíndricos (puerto **5002**).
 
 ---
 

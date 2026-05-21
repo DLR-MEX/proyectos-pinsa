@@ -17,6 +17,8 @@ Este monorepo agrupa servicios autónomos que comparten una misma filosofía de 
 | **Sin dependencias de charts** | SVG inline + Canvas nativo para visualizaciones. |
 | **Simulación-first** | Cada servicio corre 100 % simulado por defecto (`MOCK_DATA=true`), sin necesidad de hardware/PLC/SCADA para desarrollo y demos. |
 | **Stack coherente** | Node ≥20, Express, helmet, winston, vitest. |
+| **Patrón de header compartido** | Logo PINSA, reloj en vivo, user dropdown con 3 perfiles + localStorage, campana de notificaciones, connection status SSE. |
+| **Tema visual corporativo** | Paleta blanca + azul PINSA en `trazabilidad-cocedores`, tema navy en `childrooms-render`. Ambos usan CSS variables. |
 
 ---
 
@@ -28,8 +30,8 @@ proyectos-pinsa/
 ├── trazabilidad-cocedores/     Dashboard de trazabilidad NFC de carritos de atún
 │                               en cocedores cilíndricos. Puerto 5002.
 │
-└── (futuros: cocedores-pinsa refrigeración — puerto 5001,
-              Malinalco-render — puerto 5000)
+└── childrooms-render/           Dashboard de monitoreo de cámaras de refrigeración
+                                industrial. Puerto 5001.
 ```
 
 ### 1. trazabilidad-cocedores
@@ -44,14 +46,27 @@ proyectos-pinsa/
 
 📄 [Ver documentación completa →](./trazabilidad-cocedores/)
 
+### 2. childrooms-render
+
+**Dashboard de monitoreo de cámaras de refrigeración industrial**.
+
+- **6 cámaras** (`cam1`–`cam4` activas, `cam5`–`cam6` deshabilitadas).
+- **Variables por cámara**: temperatura (°C), humedad (%), potencia consumida (kW).
+- **Modo simulado por defecto** (`MOCK_DATA=true`): motor físico-realista con histéresis termostática, ciclos de puerta abierta, defrost y carga térmica pasiva.
+- **Modo producción** (`MOCK_DATA=false`): cliente MQTT sobre Ubidots.
+- **Render 3D** con Babylon.js: vista general + vista detalle interior por cámara.
+
+**Stack**: Node ≥20 ESM · Express 4 · SSE propio · mqtt · winston · Vanilla JS ES modules · Babylon.js · ECharts · vitest
+
+📄 [Ver documentación completa →](./childrooms-render/)
+
 ---
 
 ## Convenciones del Monorepo
 
 - Cada proyecto tiene su propio `package.json`, `README.md` y opcionalmente carpeta `docs/`.
 - Los puertos están reservados para evitar colisiones en desarrollo local:
-  - `5000` — Malinalco-render
-  - `5001` — cocedores-pinsa (refrigeración)
+  - `5001` — childrooms-render
   - `5002` — trazabilidad-cocedores
 - No hay dependencias compartidas en la raíz; cada servicio es autocontenido.
 - Todos usan `node --watch` para desarrollo (`npm run dev`).
