@@ -1,0 +1,201 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Tokens — paleta PINSA + Arctic Control Room.
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Header height — usado en cálculos de viewport */
+  --h-header: 56px;
+
+  /* Fondos */
+  --c-bg:        #0B1825;
+  --c-surface:   #14283F;
+  --c-surface-2: #1B3553;
+  --c-surface-3: #1F3D5E;
+
+  /* PINSA brand */
+  --c-blue:      #00539F;
+  --c-blue-2:    #2E80D8;
+
+  /* Plata + gris */
+  --c-silver:    #8B9DAE;
+  --c-steel:     #5A6B7A;
+  --c-steel-dim: #3B4856;
+
+  /* Texto */
+  --c-ice:       #E3F1FF;
+  --c-text-dim:  #8B9DAE;
+  --c-text-mid:  #C0D2E3;
+
+  /* Acentos funcionales */
+  --c-green:     #00C896;
+  --c-green-2:   #1FE0AC;
+  --c-red:       #FF4B4B;
+  --c-amber:     #F5A623;
+  --c-cyan:      #5BB8F5;
+
+  /* Bordes */
+  --c-border:    rgba(0,83,159,0.30);
+  --c-border-hi: rgba(46,128,216,0.55);
+  --c-border-dim: rgba(139,157,174,0.18);
+
+  /* Sombras */
+  --shadow-panel: 0 2px 10px rgba(0,0,0,0.40), inset 0 1px 0 rgba(46,128,216,0.10);
+  --shadow-card:  0 4px 16px rgba(0,0,0,0.45);
+
+  /* Tipografía */
+  --font-ui:     'Rajdhani', 'Barlow Condensed', system-ui, sans-serif;
+  --font-data:   'JetBrains Mono', 'Orbitron', ui-monospace, monospace;
+
+  /* Espaciado */
+  --pad-panel:   10px;
+  --gap-grid:    10px;
+
+  /* Radius */
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--c-bg);
+  color: var(--c-ice);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;                 /* el dashboard cabe en viewport */
+}
+
+body {
+  background:
+    radial-gradient(ellipse 1200px 600px at 50% -200px, rgba(0,83,159,0.20), transparent 70%),
+    radial-gradient(ellipse 800px 400px at 90% 100%, rgba(0,200,150,0.08), transparent 70%),
+    var(--c-bg);
+  min-height: 100vh;
+}
+
+button { font-family: inherit; cursor: pointer; }
+ul     { list-style: none; padding: 0; margin: 0; }
+a      { color: inherit; text-decoration: none; }
+
+/* Focus visible global */
+:focus-visible {
+  outline: 2px solid var(--c-cyan);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+button:focus-visible, a:focus-visible,
+.sidebar-item:focus-visible, .kpi-card:focus-visible {
+  outline-color: var(--c-cyan);
+  box-shadow: 0 0 0 4px rgba(91,184,245,0.18);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar           { width: 7px; height: 7px; }
+::-webkit-scrollbar-track     { background: transparent; }
+::-webkit-scrollbar-thumb     { background: rgba(139,157,174,0.30); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(139,157,174,0.50); }
+
+/* Panel base */
+.panel {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--pad-panel);
+  box-shadow: var(--shadow-panel);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--c-text-mid);
+}
+
+.panel-subtitle {
+  font-size: 0.66rem;
+  color: var(--c-text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.panel-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: var(--c-red);
+  color: white;
+  font-family: var(--font-data);
+  font-weight: 600;
+  font-size: 0.72rem;
+  border-radius: var(--r-sm);
+  margin-left: 6px;
+}
+
+/* Estado de conexión genérico */
+.connection-dot {
+  display: inline-block;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--c-steel);
+  transition: all 200ms ease;
+}
+.connection-dot.ok   { background: var(--c-green); box-shadow: 0 0 8px rgba(0,200,150,0.6); animation: pulseDot 2s ease-in-out infinite; }
+.connection-dot.warn { background: var(--c-amber); box-shadow: 0 0 8px rgba(245,166,35,0.6); }
+.connection-dot.err  { background: var(--c-red);   box-shadow: 0 0 8px rgba(255,75,75,0.6); }
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%      { transform: scale(1.25); opacity: 0.7; }
+}
+
+/* Panel tabs (alarmas Activas/Histórico) */
+.panel-tabs {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+.panel-tab {
+  background: transparent;
+  border: 1px solid var(--c-border-dim);
+  color: var(--c-text-dim);
+  padding: 4px 10px;
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 150ms;
+}
+.panel-tab:hover { color: var(--c-cyan); border-color: var(--c-border-hi); }
+.panel-tab.active {
+  color: var(--c-ice);
+  background: rgba(46,128,216,0.10);
+  border-color: var(--c-border-hi);
+}

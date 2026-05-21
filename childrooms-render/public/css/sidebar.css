@@ -1,0 +1,156 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   App shell + sidebar
+   ────────────────────────────────────────────────────────────────────────── */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  height: calc(100vh - var(--h-header));
+  min-height: 0;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, var(--c-surface) 0%, var(--c-surface) 80%, var(--c-bg) 100%);
+  border-right: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 0;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 18px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--c-text-dim);
+  cursor: pointer;
+  position: relative;
+  transition: background 150ms, color 150ms;
+}
+
+.sidebar-item:hover {
+  background: rgba(46,128,216,0.08);
+  color: var(--c-ice);
+}
+
+.sidebar-item.active {
+  background: linear-gradient(90deg, rgba(46,128,216,0.18) 0%, rgba(46,128,216,0.02) 100%);
+  color: var(--c-ice);
+}
+
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 6px; bottom: 6px;
+  width: 3px;
+  background: var(--c-blue-2);
+  box-shadow: 0 0 8px var(--c-blue-2);
+  border-radius: 0 2px 2px 0;
+}
+
+.sidebar-icon {
+  font-size: 0.95rem;
+  width: 20px;
+  text-align: center;
+  color: inherit;
+}
+
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--c-red);
+  color: white;
+  font-family: var(--font-data);
+  font-size: 0.62rem;
+  font-weight: 600;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-badge.has-alarms { display: inline-flex; }
+
+.sidebar-footer {
+  padding: 12px 18px 4px;
+  border-top: 1px solid var(--c-border-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sys-status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sys-status-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+  color: var(--c-text-dim);
+  text-transform: uppercase;
+}
+
+.sys-status-value {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  color: var(--c-green);
+}
+
+.sys-status-value.warn { color: var(--c-amber); }
+.sys-status-value.err  { color: var(--c-red); }
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: var(--c-text-dim);
+  letter-spacing: 0.4px;
+  padding-top: 4px;
+  transition: color 150ms;
+}
+.sidebar-logout:hover { color: var(--c-red); }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Content area — usa flex column con regiones de altura calculada para que
+   todo quepa en el viewport sin scroll.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.content-area {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Responsive: sidebar colapsa */
+@media (max-width: 900px) {
+  .app-shell { grid-template-columns: 52px 1fr; }
+  .sidebar-item span:not(.sidebar-icon):not(.sidebar-badge) { display: none; }
+  .sidebar-item { padding: 9px 14px; justify-content: center; }
+  .sys-status-label, .sidebar-logout { display: none; }
+  .sidebar-footer { padding: 10px 6px; }
+}

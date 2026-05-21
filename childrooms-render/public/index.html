@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0B1825">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>PINSA · Sistema de Refrigeración Industrial</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="/css/variables.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/header.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/sidebar.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/kpi.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/chambers.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/side-panels.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/bottom.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/views.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/detalle.css?v=__BUILD_VERSION__">
+  <link rel="stylesheet" href="/css/responsive.css?v=__BUILD_VERSION__">
+
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+
+  <!-- ─── HEADER ─────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <img src="/images/xlogopinsa.png?v=__BUILD_VERSION__" class="pinsa-logo" alt="PINSA Congelados">
+      <div class="header-title">
+        <h1 class="system-title">Sistema de Refrigeración Industrial</h1>
+        <span class="plant-name" id="plant-name">Planta Mazatlán ▾</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="header-conn" title="Conexión con servidor">
+        <span class="connection-dot ok" id="conn-dot"></span>
+        <span class="conn-label" id="conn-label">EN LÍNEA</span>
+      </div>
+
+      <div class="header-datetime">
+        <span class="header-date" id="header-date">--/--/----</span>
+        <span class="header-time" id="header-time">--:--:--</span>
+      </div>
+
+      <button class="header-bell" aria-label="Notificaciones">
+        🔔<span class="bell-badge" id="bell-badge">0</span>
+      </button>
+
+      <div class="header-user" id="header-user" role="button" tabindex="0" aria-label="Menú de usuario">
+        <span class="user-avatar">👤</span>
+        <span class="user-name">operador ▾</span>
+
+        <div class="user-menu" id="user-menu" role="menu">
+          <div class="user-menu-header">
+            <div class="user-menu-name">operador</div>
+            <div class="user-menu-role">Sala de control</div>
+          </div>
+          <button class="user-menu-item" role="menuitem">Mi perfil</button>
+          <button class="user-menu-item" role="menuitem">Preferencias</button>
+          <button class="user-menu-item logout" role="menuitem" id="user-menu-logout">↩ Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── APP SHELL ──────────────────────────────────────────────────────── -->
+  <div class="app-shell" role="application" aria-label="Dashboard refrigeración PINSA">
+
+    <!-- ─── SIDEBAR ──────────────────────────────────────────────────────── -->
+    <nav class="sidebar">
+      <ul class="sidebar-nav">
+        <li class="sidebar-item active" data-view="resumen"      role="button" tabindex="0" aria-label="Vista Resumen">
+          <span class="sidebar-icon">▣</span><span>Resumen</span>
+        </li>
+        <li class="sidebar-item" data-view="alarmas"              role="button" tabindex="0" aria-label="Vista Alarmas">
+          <span class="sidebar-icon">⚠</span><span>Alarmas</span>
+          <span class="sidebar-badge" id="alarm-badge">0</span>
+        </li>
+        <li class="sidebar-item" data-view="tendencias"           role="button" tabindex="0" aria-label="Vista Tendencias">
+          <span class="sidebar-icon">⌁</span><span>Tendencias</span>
+        </li>
+        <li class="sidebar-item" data-view="reportes"             role="button" tabindex="0" aria-label="Vista Reportes">
+          <span class="sidebar-icon">▤</span><span>Reportes</span>
+        </li>
+        <li class="sidebar-item" data-view="configuracion"        role="button" tabindex="0" aria-label="Vista Configuración">
+          <span class="sidebar-icon">⚒</span><span>Configuración</span>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="sys-status">
+          <div class="sys-status-label">Salud del Sistema</div>
+          <div class="sys-status-value" id="sys-status-value">
+            <span class="connection-dot ok" id="sys-status-dot"></span>
+            <span id="sys-status-text">NORMAL</span>
+          </div>
+        </div>
+        <a class="sidebar-logout" id="sidebar-logout" href="#">↩ Cerrar sesión</a>
+      </div>
+    </nav>
+
+    <!-- ─── CONTENT AREA ─────────────────────────────────────────────────── -->
+    <main class="content-area">
+
+      <!-- ═════════════════════ VISTA: RESUMEN (Dashboard) ═════════════════════ -->
+      <section class="view view-resumen" data-view="resumen">
+
+        <!-- KPI BAR -->
+        <section class="kpi-bar">
+          <div class="kpi-card" style="--i:0" data-tone="cool">
+            <span class="kpi-icon">❄</span>
+            <div class="kpi-body">
+              <div class="kpi-label">Cámaras activas</div>
+              <div class="kpi-value-row"><div class="kpi-value" data-kpi="active">--</div></div>
+            </div>
+          </div>
+          <div class="kpi-card" style="--i:1" data-tone="temp">
+            <span class="kpi-icon">◉</span>
+            <div class="kpi-body">
+              <div class="kpi-label">Temp. promedio</div>
+              <div class="kpi-value-row">
+                <div class="kpi-value" data-kpi="temp">--°C</div>
+                <div class="kpi-delta" data-kpi-delta="temp"></div>
+              </div>
+              <div class="kpi-spark"><canvas data-kpi-spark="temp"></canvas></div>
+            </div>
+          </div>
+          <div class="kpi-card" style="--i:2" data-tone="hum">
+            <span class="kpi-icon">◐</span>
+            <div class="kpi-body">
+              <div class="kpi-label">Humedad promedio</div>
+              <div class="kpi-value-row">
+                <div class="kpi-value" data-kpi="hum">--%</div>
+                <div class="kpi-delta" data-kpi-delta="hum"></div>
+              </div>
+              <div class="kpi-spark"><canvas data-kpi-spark="hum"></canvas></div>
+            </div>
+          </div>
+          <div class="kpi-card" style="--i:3" data-tone="power">
+            <span class="kpi-icon">⚡</span>
+            <div class="kpi-body">
+              <div class="kpi-label">Consumo actual</div>
+              <div class="kpi-value-row">
+                <div class="kpi-value" data-kpi="power">-- kW</div>
+                <div class="kpi-delta" data-kpi-delta="power"></div>
+              </div>
+              <div class="kpi-spark"><canvas data-kpi-spark="power"></canvas></div>
+            </div>
+          </div>
+          <div class="kpi-card" style="--i:4" data-tone="cop">
+            <span class="kpi-icon">◈</span>
+            <div class="kpi-body">
+              <div class="kpi-label">COP sistema</div>
+              <div class="kpi-value-row">
+                <div class="kpi-value" data-kpi="cop">--</div>
+                <div class="kpi-delta" data-kpi-delta="cop"></div>
+              </div>
+              <div class="kpi-spark"><canvas data-kpi-spark="cop"></canvas></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="mid-row">
+          <div class="panel chambers-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">Vista general de cámaras</h3>
+              <div class="panel-header-right">
+                <div class="heatmap-toggle" id="heatmap-toggle" role="group" aria-label="Modo mapa de calor">
+                  <button class="heatmap-mode active" data-mode="temp" aria-pressed="true"  title="Pintar cámaras por temperatura">TEMP</button>
+                  <button class="heatmap-mode"        data-mode="hum"  aria-pressed="false" title="Pintar cámaras por humedad">HUM</button>
+                </div>
+                <button class="rot-toggle active" id="rot-toggle" title="Pausar/reanudar rotación" aria-label="Toggle rotación 3D"><span>↻</span></button>
+                <div class="system-state">
+                  <span>Sistema de refrigeración</span>
+                  <span class="state-badge state-on" id="system-state">● EN OPERACIÓN</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="chambers-stage chambers-stage-3d">
+              <canvas id="render-canvas" touch-action="none"></canvas>
+              <div class="render-hint">arrastra para girar · rueda para zoom</div>
+
+              <div class="colorbar-h" id="colorbar-h">
+                <div class="colorbar-h-title">TEMPERATURA (°C)</div>
+                <div class="colorbar-h-bar" id="colorbar-h-bar"></div>
+                <div class="colorbar-h-scale" id="colorbar-h-scale"></div>
+              </div>
+            </div>
+
+            <div class="chamber-status-row" id="chamber-status-row"></div>
+          </div>
+
+          <aside class="side-stack">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-tabs">
+                  <button class="panel-tab active" data-alarm-tab="active">Activas <span class="panel-badge alarm-count-badge" id="panel-alarm-count">0</span></button>
+                  <button class="panel-tab" data-alarm-tab="history">Histórico</button>
+                </div>
+              </div>
+              <div class="alarm-list" id="alarm-list" role="region" aria-live="polite">
+                <div class="alarm-empty">Sin alarmas activas</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3 class="panel-title">Información del sistema</h3>
+              </div>
+              <dl class="sys-info-list" id="sys-info-list">
+                <div><dt>Modo de operación</dt>    <dd data-sys="modo" class="mode-auto"><span class="sys-dot ok"></span>Automático</dd></div>
+                <div><dt>Setpoint general</dt>     <dd data-sys="setpoint"><span class="sys-dot unknown"></span>-- °C</dd></div>
+                <div><dt>Temperatura exterior</dt> <dd data-sys="temp_ext"><span class="sys-dot unknown"></span>-- °C</dd></div>
+                <div><dt>Humedad exterior</dt>     <dd data-sys="hum_ext"><span class="sys-dot unknown"></span>-- %</dd></div>
+                <div><dt>Presión de succión</dt>   <dd data-sys="p_succion"><span class="sys-dot unknown"></span>-- bar</dd></div>
+                <div><dt>Presión de descarga</dt>  <dd data-sys="p_descarga"><span class="sys-dot unknown"></span>-- bar</dd></div>
+                <div><dt>Eficiencia sistema</dt>   <dd data-sys="eficiencia"><span class="sys-dot unknown"></span>-- %</dd></div>
+              </dl>
+            </div>
+          </aside>
+        </section>
+
+        <section class="bottom-row">
+          <div class="panel panel-trends">
+            <div class="panel-header">
+              <h3 class="panel-title">Tendencias de temperatura</h3>
+              <span class="panel-subtitle">Últimas 6 horas</span>
+            </div>
+            <canvas id="trend-canvas"></canvas>
+            <div class="trend-legend" id="trend-legend"></div>
+          </div>
+
+          <div class="panel panel-equipos">
+            <div class="panel-header">
+              <h3 class="panel-title">Estado de equipos principales</h3>
+            </div>
+            <ul class="equipos-list" id="equipos-list"></ul>
+          </div>
+
+          <div class="panel panel-eventos">
+            <div class="panel-header">
+              <h3 class="panel-title">Consumos recientes</h3>
+              <span class="panel-power-value" data-kpi="power-bottom">-- kW</span>
+            </div>
+            <canvas id="power-canvas"></canvas>
+            <h4 class="panel-subtitle subtitle-divider">Eventos recientes</h4>
+            <ul class="eventos-list" id="eventos-list"></ul>
+          </div>
+        </section>
+      </section>
+
+      <!-- ═════════════════════ VISTA: ALARMAS ═════════════════════ -->
+      <section class="view view-alarmas" data-view="alarmas">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Gestión de alarmas</h2>
+            <p class="view-subtitle">Panel andon — reconoce, monitorea e investiga incidentes</p>
+          </div>
+          <div class="view-header-stats" id="alarmas-stats"></div>
+        </div>
+
+        <div class="view-body alarmas-body">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-tabs">
+                <button class="panel-tab active" data-alarmas-tab="active">Activas</button>
+                <button class="panel-tab" data-alarmas-tab="history">Histórico</button>
+              </div>
+            </div>
+            <div class="alarmas-table-wrap">
+              <table class="alarmas-table" id="alarmas-table">
+                <thead></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: TENDENCIAS ═════════════════════ -->
+      <section class="view view-tendencias" data-view="tendencias">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Tendencias del sistema</h2>
+            <p class="view-subtitle">Histórico de temperatura, humedad y consumo</p>
+          </div>
+          <div class="trend-controls">
+            <label class="trend-control">
+              <span>Métrica</span>
+              <select id="trend-metric">
+                <option value="temperature">Temperatura</option>
+                <option value="humidity">Humedad</option>
+                <option value="power_kw">Consumo</option>
+              </select>
+            </label>
+            <label class="trend-control">
+              <span>Rango</span>
+              <select id="trend-range">
+                <option value="900000">15 min</option>
+                <option value="3600000" selected>1 hora</option>
+                <option value="21600000">6 horas</option>
+                <option value="86400000">24 horas</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="view-body trends-body">
+          <div class="panel panel-trends-large">
+            <div class="trends-toolbar">
+              <button class="report-btn" id="trend-reset-zoom" title="Restaurar zoom">⟲ Restaurar zoom</button>
+              <span class="trends-hint">Rueda = zoom · arrastrar = pan · selector inferior = rango</span>
+            </div>
+            <div id="trend-chart-large" class="trend-chart-large"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: REPORTES ═════════════════════ -->
+      <section class="view view-reportes" data-view="reportes">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Reportes</h2>
+            <p class="view-subtitle">Exporta el histórico en formato CSV — filtra por rango de fechas</p>
+          </div>
+          <div class="report-daterange">
+            <label class="report-date">
+              <span>Desde</span>
+              <input type="date" id="report-from">
+            </label>
+            <label class="report-date">
+              <span>Hasta</span>
+              <input type="date" id="report-to">
+            </label>
+            <button class="report-btn" id="report-range-reset" title="Quitar el filtro y exportar todo el histórico">Limpiar</button>
+          </div>
+        </div>
+
+        <div class="view-body reportes-body">
+          <div class="report-card">
+            <div class="report-card-head">
+              <span class="report-icon">◉</span>
+              <div>
+                <h3>Temperaturas por cámara</h3>
+                <p>Histórico de cam1–cam6 con timestamp</p>
+              </div>
+            </div>
+            <button class="report-btn" data-report="temp">Descargar CSV</button>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-head">
+              <span class="report-icon">◐</span>
+              <div>
+                <h3>Humedad por cámara</h3>
+                <p>Histórico de humedad relativa</p>
+              </div>
+            </div>
+            <button class="report-btn" data-report="hum">Descargar CSV</button>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-head">
+              <span class="report-icon">⚡</span>
+              <div>
+                <h3>Consumo eléctrico</h3>
+                <p>kW por cámara, en el tiempo</p>
+              </div>
+            </div>
+            <button class="report-btn" data-report="power">Descargar CSV</button>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-head">
+              <span class="report-icon">◈</span>
+              <div>
+                <h3>Variables del sistema</h3>
+                <p>Setpoint, temp/hum ext., presiones, eficiencia</p>
+              </div>
+            </div>
+            <button class="report-btn" data-report="sys">Descargar CSV</button>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-head">
+              <span class="report-icon">⌁</span>
+              <div>
+                <h3>Promedios calculados</h3>
+                <p>Temp y humedad promedio del sistema</p>
+              </div>
+            </div>
+            <button class="report-btn" data-report="averages">Descargar CSV</button>
+          </div>
+
+          <div class="report-card">
+            <div class="report-card-head">
+              <span class="report-icon">⚠</span>
+              <div>
+                <h3>Histórico de alarmas</h3>
+                <p>Todas las alarmas con duración y resolución</p>
+              </div>
+            </div>
+            <button class="report-btn" data-report="alarms">Descargar CSV</button>
+          </div>
+
+          <div class="report-card report-card-all">
+            <div class="report-card-head">
+              <span class="report-icon">▼</span>
+              <div>
+                <h3>Paquete completo</h3>
+                <p>Todas las variables en un solo CSV</p>
+              </div>
+            </div>
+            <button class="report-btn primary" data-report="all">Descargar CSV completo</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: DETALLE DE CÁMARA ═════════════════════ -->
+      <section class="view view-camara-detalle" data-view="camara-detalle">
+        <div class="view-header view-header-detalle">
+          <button class="btn-back" id="btn-back-detalle" aria-label="Volver al resumen">← Volver</button>
+          <div class="detalle-title">
+            <h2 class="view-title" id="detalle-cam-label">Cámara —</h2>
+            <div class="view-subtitle" id="detalle-cam-status">● SIN DATOS</div>
+          </div>
+          <div class="heatmap-toggle" id="detalle-heatmap-toggle" role="group" aria-label="Modo mapa de calor">
+            <button class="heatmap-mode active" data-mode="temp" aria-pressed="true"  title="Pintar interior por temperatura">TEMP</button>
+            <button class="heatmap-mode"        data-mode="hum"  aria-pressed="false" title="Pintar interior por humedad">HUM</button>
+          </div>
+          <select class="cam-selector" id="detalle-cam-select" aria-label="Seleccionar cámara"></select>
+        </div>
+
+        <div class="view-body detalle-grid">
+          <div class="detalle-stage">
+            <canvas id="render-canvas-interior" touch-action="none"></canvas>
+
+            <div class="detalle-readout" id="detalle-readout">
+              <span class="readout-mode" id="detalle-readout-mode">TEMP</span>
+              <span class="readout-value" id="detalle-readout-value">-- °C</span>
+              <span class="readout-sub"   id="detalle-readout-sub">SP -- °C</span>
+            </div>
+
+            <div class="colorbar-h colorbar-h-detalle" id="colorbar-h-detalle">
+              <div class="colorbar-h-title" id="colorbar-h-detalle-title">TEMPERATURA (°C)</div>
+              <div class="colorbar-h-bar"   id="colorbar-h-detalle-bar"></div>
+              <div class="colorbar-h-scale" id="colorbar-h-detalle-scale"></div>
+            </div>
+
+            <div class="detalle-cam-footer">
+              <span class="detalle-cam-name" id="detalle-cam-footer-name">Cámara —</span>
+              <span class="detalle-cam-online">● EN LÍNEA</span>
+            </div>
+          </div>
+
+          <aside class="detalle-side">
+            <section class="panel panel-detalle-info">
+              <header class="panel-head"><span class="panel-head-icon">◉</span>Información de la cámara</header>
+              <dl class="detalle-dl" id="detalle-info-dl"></dl>
+            </section>
+            <section class="panel panel-detalle-equipos">
+              <header class="panel-head"><span class="panel-head-icon">⚙</span>Equipos</header>
+              <ul class="detalle-equipos" id="detalle-equipos-list"></ul>
+            </section>
+            <section class="panel panel-detalle-alarmas">
+              <header class="panel-head"><span class="panel-head-icon">⚠</span>Alarmas activas</header>
+              <table class="alarmas-mini" id="detalle-alarmas-mini">
+                <tbody><tr><td class="alarmas-empty">Sin alarmas activas</td></tr></tbody>
+              </table>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ═════════════════════ VISTA: CONFIGURACIÓN ═════════════════════ -->
+      <section class="view view-configuracion" data-view="configuracion">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Configuración de umbrales</h2>
+            <p class="view-subtitle">Min / ideal / max por cámara. El ideal ± 3°C define la zona verde del render y de las alertas.</p>
+          </div>
+          <div class="config-actions">
+            <button class="report-btn" id="config-reset">Restaurar defaults</button>
+            <button class="report-btn primary" id="config-save">Guardar cambios</button>
+          </div>
+        </div>
+
+        <div class="view-body config-body">
+          <div class="panel config-panel">
+            <h3 class="panel-title">Umbral general del sistema</h3>
+            <p class="config-desc">Aplica a todas las cámaras. La paleta del render y el slider de color se extienden ±5 unidades por encima del max y por debajo del min.</p>
+            <div class="config-grid" id="config-general"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="/js/app.js?v=__BUILD_VERSION__"></script>
+</body>
+</html>

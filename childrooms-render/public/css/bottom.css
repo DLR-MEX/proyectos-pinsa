@@ -1,0 +1,314 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Bottom row: tendencias + equipos + consumo/eventos
+   ────────────────────────────────────────────────────────────────────────── */
+
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.1fr;
+  gap: var(--gap-grid);
+  /* Altura objetivo cómoda con clamp por viewport: 200 mínimo, ~28vh ideal,
+     290 máximo. Permite respirar en pantallas grandes sin solaparse con el
+     mid-row y sin colapsar en chicas. */
+  height: clamp(200px, 28vh, 290px);
+  flex-shrink: 0;
+}
+
+@media (max-width: 1100px) {
+  .bottom-row { grid-template-columns: 1fr 1fr; height: auto; }
+  .panel-eventos { grid-column: span 2; }
+}
+@media (max-width: 700px) {
+  .bottom-row { grid-template-columns: 1fr; }
+  .panel-eventos { grid-column: auto; }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Tendencias
+   ────────────────────────────────────────────────────────────────────────── */
+
+.panel-trends {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#trend-canvas {
+  width: 100%;
+  flex: 1;
+  display: block;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--c-border-dim);
+  cursor: crosshair;
+}
+
+.trend-tooltip {
+  display: none;
+  position: absolute;
+  background: rgba(11,24,37,0.95);
+  border: 1px solid var(--c-border-hi);
+  border-radius: var(--r-sm);
+  padding: 6px 8px;
+  font-size: 0.66rem;
+  font-family: var(--font-data);
+  color: var(--c-ice);
+  pointer-events: none;
+  z-index: 10;
+  min-width: 130px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.55);
+}
+.trend-tooltip-time {
+  font-weight: 700;
+  font-size: 0.66rem;
+  color: var(--c-cyan);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--c-border-dim);
+}
+.trend-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 0;
+}
+.trend-tooltip-swatch {
+  width: 10px; height: 3px;
+  display: inline-block;
+  border-radius: 1.5px;
+}
+
+.trend-legend {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 4px;
+  font-size: 0.62rem;
+  color: var(--c-text-mid);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.trend-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 3px;
+  border-radius: 1.5px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Equipos principales — con load bar y tiempo en estado
+   ────────────────────────────────────────────────────────────────────────── */
+
+.panel-equipos {
+  min-height: 0;
+}
+
+.equipos-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  gap: 2px;
+}
+
+.equipo-row {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--c-border-dim);
+  font-size: 0.72rem;
+}
+.equipo-row:last-child { border-bottom: none; }
+
+.equipo-icon-wrap {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eq-svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.equipo-body { min-width: 0; }
+.equipo-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1px;
+}
+.equipo-label {
+  font-family: var(--font-ui);
+  color: var(--c-ice);
+  letter-spacing: 0.3px;
+  font-size: 0.72rem;
+}
+.equipo-status {
+  font-family: var(--font-data);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+}
+.equipo-status.on  { color: var(--c-green); }
+.equipo-status.off { color: var(--c-amber); }
+
+.equipo-time {
+  font-family: var(--font-data);
+  font-size: 0.58rem;
+  letter-spacing: 0.5px;
+  color: var(--c-text-dim);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Animaciones SVG de equipos
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Compresor: pistones suben/bajan en oposición */
+.eq-piston-a { animation: pistonA 0.7s ease-in-out infinite; }
+.eq-piston-b { animation: pistonB 0.7s ease-in-out infinite; }
+@keyframes pistonA {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+@keyframes pistonB {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+
+/* Piloto verde luminoso cuando ON */
+.eq-pilot {
+  fill: var(--c-green);
+  filter: drop-shadow(0 0 2px rgba(0,200,150,0.8));
+  animation: pilotPulse 1.4s ease-in-out infinite;
+}
+@keyframes pilotPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+/* Condensador: ventilador girando — view-box ancla el origin a 16,16 (centro del viewBox 0..32) */
+.eq-fan {
+  animation: fanSpin 1.3s linear infinite;
+  transform-box: view-box;
+  transform-origin: 16px 16px;
+}
+@keyframes fanSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Bomba: impulsor más lento */
+.eq-impeller {
+  animation: fanSpin 2s linear infinite;
+  transform-box: view-box;
+  transform-origin: 16px 16px;
+}
+
+/* Evaporador: ventilador en el lado derecho del SVG (centro en 25,16 del view-box). */
+.eq-fan-right {
+  animation: fanSpin 1.3s linear infinite;
+  transform-box: view-box;
+  transform-origin: 25px 16px;
+}
+
+/* Estado OFF: detiene animaciones y desatura */
+.eq-svg.eq-off { filter: grayscale(0.85) brightness(0.65); }
+.eq-svg.eq-off .eq-piston-a,
+.eq-svg.eq-off .eq-piston-b,
+.eq-svg.eq-off .eq-fan,
+.eq-svg.eq-off .eq-fan-right,
+.eq-svg.eq-off .eq-impeller,
+.eq-svg.eq-off .eq-pilot { animation: none; }
+.eq-svg.eq-off .eq-pilot { fill: var(--c-red); opacity: 0.7; }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Consumo + eventos
+   ────────────────────────────────────────────────────────────────────────── */
+
+.panel-eventos {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel-power-value {
+  font-family: var(--font-data);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--c-amber);
+  letter-spacing: 0.5px;
+}
+
+#power-canvas {
+  display: block;
+  width: 100%;
+  height: 56px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--c-border-dim);
+  flex-shrink: 0;
+}
+
+.subtitle-divider {
+  margin: 6px 0 4px;
+  padding-top: 6px;
+  border-top: 1px solid var(--c-border-dim);
+  font-size: 0.62rem;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+  flex-shrink: 0;
+}
+
+.eventos-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.evento-item {
+  display: grid;
+  grid-template-columns: 10px 50px 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 2px;
+  font-size: 0.68rem;
+  border-bottom: 1px dashed var(--c-border-dim);
+}
+.evento-item:last-child { border-bottom: none; }
+.evento-item.evento-empty {
+  grid-template-columns: 1fr;
+  text-align: center;
+  padding: 10px;
+}
+
+.evento-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--c-cyan);
+  border: 1px solid rgba(91,184,245,0.5);
+}
+.evento-dot.info { background: var(--c-cyan);  box-shadow: 0 0 5px rgba(91,184,245,0.50); }
+.evento-dot.warn { background: var(--c-amber); box-shadow: 0 0 5px rgba(245,166,35,0.50); }
+
+.evento-time {
+  font-family: var(--font-data);
+  color: var(--c-text-dim);
+  font-size: 0.62rem;
+}
+
+.evento-label {
+  color: var(--c-ice);
+  letter-spacing: 0.2px;
+}

@@ -1,0 +1,305 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Vista general de cámaras (3D)
+   ────────────────────────────────────────────────────────────────────────── */
+
+.chambers-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+.chambers-panel .panel-header {
+  margin-bottom: 4px;
+}
+
+.panel-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Toggle TEMP / HUM del mapa de calor */
+.heatmap-toggle {
+  display: inline-flex;
+  border: 1px solid var(--c-border-dim);
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(11,24,37,0.55);
+  height: 26px;
+}
+.heatmap-mode {
+  background: transparent;
+  border: none;
+  color: var(--c-text-dim);
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  padding: 0 11px;
+  cursor: pointer;
+  transition: background 200ms, color 200ms;
+}
+.heatmap-mode:hover { color: var(--c-cyan); }
+.heatmap-mode.active {
+  background: var(--c-blue);
+  color: var(--c-ice);
+  box-shadow: inset 0 0 8px rgba(46,128,216,0.40);
+}
+
+.rot-toggle {
+  background: transparent;
+  border: 1px solid var(--c-border-dim);
+  color: var(--c-text-dim);
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms;
+}
+.rot-toggle:hover { border-color: var(--c-cyan); color: var(--c-cyan); }
+.rot-toggle.active {
+  border-color: var(--c-green);
+  color: var(--c-green);
+}
+.rot-toggle.active span {
+  animation: rotSpin 4s linear infinite;
+  display: inline-block;
+}
+@keyframes rotSpin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+.system-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.60rem;
+  letter-spacing: 1.3px;
+  color: var(--c-text-dim);
+  text-transform: uppercase;
+}
+.state-badge {
+  margin-top: 1px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  font-size: 0.72rem;
+}
+.state-badge.state-on {
+  color: var(--c-green);
+  animation: pulseOn 2s ease-in-out infinite;
+}
+@keyframes pulseOn {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(0,200,150,0.55); }
+  50%      { opacity: 0.65; text-shadow: 0 0 4px rgba(0,200,150,0.30); }
+}
+
+/* Stage 3D: canvas a anchura completa con fondo limpio (sin grid ni gradients
+   que dupliquen sombras sobre el canvas semitransparente). */
+/* Sin overflow:hidden + border-radius en el contenedor: ese combo fuerza
+   un layer compuesto que el navegador filtra con bilinear y produce blur
+   sobre el canvas WebGL. Ahora el redondeado se aplica al canvas mismo. */
+.chambers-stage-3d {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 220px;
+  padding: 0;
+  background: #060E18;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+}
+
+#render-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+  touch-action: none;
+  image-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  border-radius: var(--r-md);
+}
+
+.render-hint {
+  position: absolute;
+  bottom: 6px;
+  right: 12px;
+  font-size: 0.60rem;
+  letter-spacing: 1.4px;
+  color: var(--c-text-dim);
+  text-transform: uppercase;
+  pointer-events: none;
+  font-family: var(--font-ui);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Colorbar horizontal — paleta de temperatura
+   ────────────────────────────────────────────────────────────────────────── */
+
+.colorbar-h {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+  width: min(420px, 65%);
+}
+
+.colorbar-h-title {
+  font-family: var(--font-ui);
+  font-size: 0.60rem;
+  font-weight: 700;
+  color: var(--c-text-mid);
+  letter-spacing: 2.5px;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(11,24,37,0.85);
+}
+
+.colorbar-h-bar {
+  height: 10px;
+  border-radius: 3px;
+  border: 1px solid var(--c-border-hi);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.colorbar-h-scale {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-data);
+  font-size: 0.62rem;
+  color: var(--c-ice);
+  text-shadow: 0 0 6px rgba(11,24,37,0.95);
+}
+
+.colorbar-h-scale span {
+  padding-left: 4px;
+  border-left: 1px solid rgba(227,241,255,0.30);
+}
+
+.colorbar-h-scale span:last-child {
+  border-left: none;
+  padding-left: 0;
+  padding-right: 4px;
+  border-right: 1px solid rgba(227,241,255,0.30);
+}
+
+@media (max-width: 900px) {
+  .colorbar-h { width: 95%; bottom: 6px; }
+  .colorbar-h-title { font-size: 0.55rem; }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Status panels C1-C4 debajo del canvas 3D
+   ────────────────────────────────────────────────────────────────────────── */
+
+.chamber-status-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 8px 0 2px;
+  flex-shrink: 0;
+}
+
+.status-panel {
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  padding: 7px 9px;
+  transition: border-color 160ms, transform 160ms, box-shadow 160ms;
+}
+.status-panel.is-clickable { cursor: pointer; }
+.status-panel.is-clickable:hover {
+  border-color: var(--c-cyan);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(46,128,216,0.20);
+}
+.status-panel.is-clickable:focus-visible {
+  outline: none;
+  border-color: var(--c-cyan);
+  box-shadow: 0 0 0 3px rgba(91,184,245,0.30);
+}
+.status-panel.is-clickable:active { transform: translateY(0); }
+
+.status-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  color: var(--c-ice);
+}
+
+.status-panel-sp {
+  font-family: var(--font-data);
+  font-size: 0.58rem;
+  letter-spacing: 1px;
+  color: var(--c-text-dim);
+  font-weight: 600;
+}
+
+/* Bloque de equipos: compresor + evaporador en dos columnas */
+.status-equipos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.status-eq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 4px;
+  background: rgba(11,24,37,0.45);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--c-border-dim);
+  transition: border-color 220ms, background 220ms, box-shadow 220ms;
+}
+.status-eq.is-on {
+  border-color: rgba(0,200,150,0.45);
+  background: rgba(0,200,150,0.06);
+  box-shadow: inset 0 0 6px rgba(0,200,150,0.10);
+}
+.status-eq.is-off {
+  border-color: rgba(245,166,35,0.30);
+}
+
+.status-eq-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.status-eq-icon .eq-svg {
+  width: 28px;
+  height: 28px;
+}
+
+.status-eq-label {
+  font-family: var(--font-ui);
+  font-size: 0.56rem;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+  text-align: center;
+}
+
+.status-eq-state {
+  font-family: var(--font-data);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+.status-eq-state.on  { color: var(--c-green); text-shadow: 0 0 6px rgba(0,200,150,0.45); }
+.status-eq-state.off { color: var(--c-amber); }

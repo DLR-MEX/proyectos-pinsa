@@ -1,0 +1,214 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Responsive — tablet y móvil (Android/iOS)
+   Carga al final del cascade para sobre-escribir reglas anteriores.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Tablet pequeña / landscape (≤ 900px) ────────────────────────────────── */
+@media (max-width: 900px) {
+  .header-conn .conn-label,
+  .plant-name,
+  .header-datetime .header-date,
+  .user-name {
+    display: none;
+  }
+  .system-title { font-size: 0.78rem; letter-spacing: 1.5px; }
+  .header { padding: 0 10px; }
+  .header-right { gap: 8px; }
+
+  .panel-header-right { flex-wrap: wrap; gap: 6px; }
+  .heatmap-toggle { height: 24px; }
+  .heatmap-mode { padding: 0 8px; font-size: 0.58rem; }
+
+  .trend-controls { gap: 8px; }
+}
+
+/* ── Móvil (Android) — vertical, sidebar abajo, todo apilado ───────────── */
+@media (max-width: 700px) {
+  /* Permite scroll vertical natural en el dashboard. */
+  html, body { overflow: auto; height: auto; min-height: 100%; }
+  body { font-size: 12px; }
+
+  /* Header: 2 filas — fila superior con logo + título, fila inferior con
+     conexión + hora + bell + menú. */
+  .header {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+  .header-left { gap: 8px; flex: 1 1 auto; min-width: 0; }
+  .pinsa-logo  { height: 24px; }
+  .system-title {
+    font-size: 0.72rem;
+    letter-spacing: 1.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .header-right { gap: 8px; flex-wrap: wrap; }
+  .header-bell  { width: 28px; height: 28px; font-size: 0.8rem; }
+  .header-time  { font-size: 0.78rem; }
+  .header-user  { padding: 3px 6px 3px 3px; }
+
+  /* App shell se vuelve columna; la sidebar pasa a barra inferior. */
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    height: auto;
+  }
+  .sidebar {
+    position: sticky;
+    bottom: 0;
+    z-index: 30;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    padding: 0;
+    border-right: none;
+    border-top: 1px solid var(--c-border-hi);
+    background: linear-gradient(0deg, var(--c-surface) 0%, var(--c-surface-2) 100%);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .sidebar-nav {
+    flex-direction: row;
+    flex: 1;
+    gap: 0;
+    justify-content: space-around;
+  }
+  .sidebar-item {
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 6px;
+    font-size: 0.58rem;
+    letter-spacing: 0.4px;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .sidebar-item.active::before { display: none; }
+  .sidebar-item.active {
+    background: rgba(46,128,216,0.22);
+    box-shadow: inset 0 2px 0 var(--c-blue-2);
+  }
+  .sidebar-item span:not(.sidebar-icon):not(.sidebar-badge) {
+    display: inline;
+    font-size: 0.56rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+  }
+  .sidebar-badge {
+    position: absolute;
+    top: 2px;
+    right: 50%;
+    transform: translateX(20px);
+    font-size: 0.54rem;
+    height: 14px;
+    min-width: 14px;
+  }
+  .sidebar-footer { display: none; }
+
+  .content-area {
+    padding: 8px;
+    gap: 8px;
+    height: auto;
+    overflow: visible;
+    padding-bottom: 14px;
+  }
+
+  /* Vista activa: deja crecer en alto. */
+  .view, .view-resumen.view-active { height: auto; min-height: 0; }
+  .view-body { overflow: visible; flex: none; }
+
+  /* KPI bar: 2 columnas, sparklines ocultas. */
+  .kpi-bar { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .kpi-card { padding: 8px; gap: 8px; }
+  .kpi-icon { width: 28px; height: 28px; font-size: 0.85rem; }
+  .kpi-value { font-size: 0.95rem; }
+  .kpi-spark { display: none; }
+  .kpi-label { font-size: 0.56rem; }
+
+  /* Mid-row + bottom-row apilan vertical. */
+  .mid-row, .bottom-row {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .side-stack { grid-template-rows: auto auto; }
+
+  /* Canvas 3D — altura usable touch. El hint de instrucciones se solapaba
+     con la colorbar en pantallas chicas; ocultar en touch. */
+  .chambers-stage-3d { min-height: 280px; }
+  #render-canvas { touch-action: none; }
+  .render-hint { display: none; }
+
+  /* Status panels: 2 columnas en lugar de 4. */
+  .chamber-status-row { grid-template-columns: repeat(2, 1fr); }
+
+  /* Colorbar más compacta. */
+  .colorbar-h { width: 92%; bottom: 6px; }
+  .colorbar-h-title { font-size: 0.52rem; letter-spacing: 1.5px; }
+  .colorbar-h-scale { font-size: 0.55rem; }
+
+  /* Panel-header-right: stack para que el system-state no empuje el toggle. */
+  .panel-header-right { width: 100%; justify-content: space-between; }
+  .system-state { font-size: 0.55rem; }
+  .state-badge  { font-size: 0.65rem; }
+
+  /* Trends del resumen: dale altura mínima. */
+  .panel-trends   { min-height: 200px; }
+  #trend-canvas   { min-height: 140px; }
+  .panel-equipos, .panel-eventos { min-height: 200px; }
+
+  /* Equipos list y eventos: scroll interno con altura limitada. */
+  .equipos-list, .eventos-list { max-height: 220px; }
+
+  /* Vista tendencias grande: alto razonable. */
+  .trend-chart-large { min-height: 320px; }
+  .trends-toolbar { flex-wrap: wrap; gap: 6px; }
+  .trends-hint { font-size: 0.55rem; }
+  .trend-controls { flex-wrap: wrap; }
+
+  /* View header sin border-bottom apretado en móvil. */
+  .view-header { flex-wrap: wrap; gap: 8px; padding-bottom: 6px; }
+  .view-title { font-size: 0.95rem; }
+  .view-subtitle { font-size: 0.68rem; }
+
+  /* Alarmas y reportes: cards a 1 columna. */
+  .reportes-body { grid-template-columns: 1fr; }
+  .report-card-all { grid-column: auto; }
+  .report-daterange { width: 100%; flex-wrap: wrap; }
+  .alarmas-table thead th,
+  .alarmas-table tbody td { padding: 6px 8px; font-size: 0.66rem; }
+
+  /* Config: campos a 1 columna. */
+  .config-grid { grid-template-columns: 1fr; }
+  .config-row  { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+
+  /* Touch targets más grandes para botones del header de paneles. */
+  .rot-toggle, .heatmap-mode, .panel-tab, .report-btn {
+    min-height: 30px;
+  }
+}
+
+/* ── Móvil compacto (≤ 380px) — Android antiguo / pantalla muy chica ─── */
+@media (max-width: 380px) {
+  .system-title { font-size: 0.62rem; }
+  .pinsa-logo { height: 20px; }
+  .kpi-bar { grid-template-columns: 1fr; }
+  .chamber-status-row { grid-template-columns: 1fr; }
+}
+
+/* ── Optimizaciones generales para touch ────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* En dispositivos táctiles, evita el delay del :hover en botones. */
+  .sidebar-item:hover,
+  .kpi-card:hover,
+  .report-card:hover { transform: none; }
+  /* Inputs de fecha más altos para tocar fácil. */
+  .report-date input[type="date"] { padding: 8px 10px; font-size: 0.85rem; }
+  .config-field input { padding: 8px 10px; font-size: 0.9rem; }
+  /* Scrollbar más visible en touch. */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+}
