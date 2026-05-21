@@ -100,7 +100,7 @@ function _showError(stage, msg) {
     position:absolute; inset:20px; display:flex; flex-direction:column;
     align-items:center; justify-content:center; gap:8px;
     text-align:center; color:#FF4B4B; font-family:var(--font-ui);
-    background:rgba(11,24,37,0.85); border:1px dashed rgba(255,75,75,0.45);
+    background:rgba(255,255,255,0.92); border:1px dashed rgba(255,75,75,0.45);
     border-radius:6px; padding:20px; z-index:10;
   `;
   err.innerHTML = `

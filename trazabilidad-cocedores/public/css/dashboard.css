@@ -61,7 +61,7 @@
 .kpi-iconbox svg { width: 24px; height: 24px; }
 
 .kpi-card[data-tone="cocedores"] .kpi-iconbox { color: var(--c-green); background: rgba(0,200,150,0.10);   border-color: rgba(0,200,150,0.35); }
-.kpi-card[data-tone="carritos"]  .kpi-iconbox { color: var(--c-cyan);  background: rgba(91,184,245,0.10);  border-color: rgba(91,184,245,0.35); }
+.kpi-card[data-tone="carritos"]  .kpi-iconbox { color: var(--c-amber);  background: rgba(245,166,35,0.10);  border-color: rgba(245,166,35,0.35); }
 .kpi-card[data-tone="listos"]    .kpi-iconbox { color: var(--c-green); background: rgba(0,200,150,0.10);   border-color: rgba(0,200,150,0.40); }
 .kpi-card[data-tone="tiempo"]    .kpi-iconbox { color: var(--c-blue-2); background: rgba(46,128,216,0.10); border-color: rgba(46,128,216,0.40); }
 .kpi-card[data-tone="alertas"]   .kpi-iconbox { color: var(--c-amber); background: rgba(245,166,35,0.10);  border-color: rgba(245,166,35,0.40); }
@@ -91,9 +91,7 @@
 .cocedores-stage {
   position: relative;
   flex: 1;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,83,159,0.20), transparent 70%),
-    linear-gradient(180deg, #08131F 0%, #060E18 100%);
+  background: #C5C9CE;
   border: 1px solid var(--c-border);
   border-radius: var(--r-md);
   overflow: hidden;
@@ -131,8 +129,8 @@
   font-weight: 700;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: var(--c-cyan);
-  background: rgba(8,19,31,0.55);
+  color: var(--c-blue);
+  background: rgba(200,204,208,0.75);
   backdrop-filter: blur(2px);
   transition: opacity 300ms;
 }
@@ -141,7 +139,7 @@
   width: 28px;
   height: 28px;
   border: 2px solid rgba(91,184,245,0.25);
-  border-top-color: var(--c-cyan);
+  border-top-color: var(--c-blue);
   border-radius: 50%;
   animation: stageSpin 0.9s linear infinite;
 }
@@ -171,7 +169,6 @@
   font-weight: 700;
   letter-spacing: 1.6px;
   color: var(--c-ice);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.95);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -183,8 +180,8 @@
   text-transform: uppercase;
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid currentColor;
-  background: rgba(11,24,37,0.78);
+  border: 1px solid var(--c-border-dim);
+  background: rgba(255,255,255,0.90);
   backdrop-filter: blur(4px);
   white-space: nowrap;
   cursor: pointer;
@@ -195,8 +192,7 @@
 .coc-label .lbl-badge[data-state="MANTENIMIENTO"] { color: var(--c-status-mtto); }
 .coc-label .lbl-badge[data-state="DESACTIVADO"]   { color: var(--c-status-desact); }
 .coc-label.is-selected .lbl-name {
-  color: var(--c-cyan);
-  text-shadow: 0 0 8px rgba(91,184,245,0.6), 0 1px 4px rgba(0,0,0,0.95);
+  color: var(--c-blue);
 }
 
 .cocedor-card {
@@ -266,7 +262,7 @@
   align-items: center;
   gap: 2px;
   font-size: 0.85rem;
-  color: var(--c-cyan);
+  color: var(--c-blue);
   animation: cartPulse 1.6s ease-in-out infinite;
 }
 @keyframes cartPulse {
@@ -296,7 +292,7 @@
   height: 130px;
   border-radius: 50%;
   position: relative;
-  box-shadow: 0 0 20px rgba(0,0,0,0.55);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   background: var(--c-surface-2);
   transition: background 600ms ease;
 }
@@ -313,7 +309,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.10), transparent 60%);
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.80), transparent 60%);
   pointer-events: none;
 }
 .donut-center {
@@ -420,7 +416,7 @@
 }
 .detalle-dl-mini dd.t-hot { color: var(--c-amber); }
 .detalle-dl-mini dd.t-ok  { color: var(--c-green); }
-.detalle-dl-mini dd.t-info { color: var(--c-cyan); }
+.detalle-dl-mini dd.t-info { color: var(--c-blue); }
 
 /* ── ROW INFERIOR: 4 PANELES ───────────────────────────────────────────── */
 .bottom4-row {
@@ -441,7 +437,7 @@
   padding: 10px 4px;
 }
 .entrada-arrow {
-  color: var(--c-cyan);
+  color: var(--c-blue);
   font-size: 1.4rem;
   animation: cartPulse 1.4s ease-in-out infinite;
 }
@@ -656,7 +652,7 @@
 .trace-step.done .trace-step-icon {
   background: var(--c-step-done);
   border-color: var(--c-step-done);
-  color: #0B1825;
+  color: var(--c-ice);
   box-shadow: 0 0 12px rgba(0,200,150,0.45);
 }
 .trace-step.active .trace-step-icon {

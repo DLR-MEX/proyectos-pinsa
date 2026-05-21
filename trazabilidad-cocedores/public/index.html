@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0B1825">
+  <meta name="theme-color" content="#FFFFFF">
   <title>PINSA · Trazabilidad NFC — Cocedores</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,34 +18,48 @@
   <link rel="stylesheet" href="/css/detalleCocedor.css?v=__BUILD_VERSION__">
 
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 </head>
 <body>
 
   <!-- ─── HEADER ─────────────────────────────────────────────────────────── -->
   <header class="header">
     <div class="header-left">
-      <div class="pinsa-logo" aria-label="PINSA">P</div>
-      <div class="brand-title">
+      <img src="/images/xlogopinsa.png?v=__BUILD_VERSION__" class="pinsa-logo" alt="PINSA Congelados">
+      <div class="header-title">
         <h1 class="system-title">Trazabilidad NFC — Cocedores</h1>
-        <span class="live-badge">
-          <span class="connection-dot ok" id="conn-dot"></span>
-          <span id="conn-label">En tiempo real</span>
-        </span>
+        <span class="plant-name" id="plant-name">Planta Mazatlán ▾</span>
       </div>
     </div>
 
     <div class="header-right">
-      <div class="header-clock">
-        <span class="header-clock-icon">◷</span>
+      <div class="header-conn">
+        <span class="connection-dot ok" id="conn-dot"></span>
+        <span class="conn-label" id="conn-label">En tiempo real</span>
+      </div>
+
+      <div class="header-datetime">
         <span id="header-date">--/--/----</span>
         <span id="header-time">--:--:--</span>
       </div>
 
-      <div class="operario-chip">
+      <button class="header-bell" aria-label="Notificaciones">
+        🔔<span class="bell-badge" id="bell-badge">0</span>
+      </button>
+
+      <div class="header-user" id="header-user" role="button" tabindex="0" aria-label="Menú de usuario">
         <span class="user-avatar">👤</span>
-        <div class="operario-meta">
-          <span class="operario-label">Operario</span>
-          <span class="operario-name" id="operario-name">LUIS R.</span>
+        <span class="user-name" id="header-user-name">LUIS R. ▾</span>
+
+        <div class="user-menu" id="user-menu" role="menu">
+          <div class="user-menu-header">
+            <div class="user-menu-name" id="user-menu-name">LUIS R.</div>
+            <div class="user-menu-role">Sala de control</div>
+          </div>
+          <button class="user-menu-item" data-user="LUIS R.">Cambiar a Luis R.</button>
+          <button class="user-menu-item" data-user="MARIA G.">Cambiar a Maria G.</button>
+          <button class="user-menu-item" data-user="JOSE L.">Cambiar a Jose L.</button>
+          <button class="user-menu-item logout" id="user-menu-logout">↩ Cerrar sesión</button>
         </div>
       </div>
     </div>

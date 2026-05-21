@@ -6,6 +6,7 @@ import { startClock, setConnStatus } from './headerClock.js';
 import { initSidebar, setAlertBadge } from './sidebar.js';
 import { initRouter, onChange as onRouterChange, show as routerShow } from './router.js';
 import { connect } from './stream.js';
+import { initHeaderUser, setUsuarioActual } from './headerUser.js';
 
 import { renderKpiBar } from './kpiBar.js';
 import { renderCocedoresStage, onSelect as onCocedorSelect, onOpenDetail as onOpenCocedorDetail, getSelected } from './cocedoresStage.js';
@@ -33,6 +34,7 @@ const state = {
   movs: [],
   carritoTrazado: null,
   detalleCocedorId: null,   // si se abre la vista detalle
+  usuarioActual: 'LUIS R.',
 };
 
 // ── Boot ────────────────────────────────────────────────────────────────
@@ -40,6 +42,7 @@ console.log('[trazabilidad] app.js loaded. BABYLON=', typeof BABYLON,
             BABYLON !== 'undefined' ? (window.BABYLON?.Engine?.Version ?? '?') : '');
 startClock();
 initSidebar();
+initHeaderUser();
 initRouter();
 
 onRouterChange((view, ctx) => {

@@ -96,12 +96,15 @@ Abre <http://localhost:5002>. Deberías ver el dashboard con cocedores, KPIs y a
 ┌──────────────────────────────────────────────────────────┐
 │                    Verificación visual                     │
 ├──────────────────────────────────────────────────────────┤
-│  1. Header: "PINSA · Trazabilidad NFC — Cocedores"      │
-│  2. Reloj en vivo en la esquina superior derecha         │
-│  3. KPIs: Ciclos completados, Carritos procesados, etc. │
-│  4. Grid de 11 cocedores con colores de estado           │
-│  5. Últimos movimientos: lista de eventos NFC recientes  │
-│  6. Badge de conexión: "En tiempo real" (punto verde)   │
+│  1. Header: logo PINSA + título + reloj + user dropdown  │
+│  2. Connection status: ● verde "En tiempo real"          │
+│  3. Reloj + fecha en vivo en la esquina superior derecha │
+│  4. Campana de notificaciones (badge si hay alertas)     │
+│  5. User dropdown: click muestra 3 perfiles + logout     │
+│  6. KPIs: Ciclos completados, Carritos procesados, etc.  │
+│  7. Grid de 11 cocedores con colores de estado           │
+│  8. Últimos movimientos: lista de eventos NFC recientes  │
+│  9. Render 3D: vista general de cocedores (Babylon.js)   │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -221,10 +224,14 @@ npm test
 │  [ ] /api/health devuelve {ok: true, ...}                  │
 │  [ ] /api/config devuelve catálogo de cocedores/recetas    │
 │  [ ] /api/data devuelve snapshot con 11 cocedores          │
-│  [ ] El reloj en el header actualiza cada segundo          │
-│  [ ] El badge "En tiempo real" muestra punto verde        │
+│  [ ] Header: logo PINSA visible                            │
+│  [ ] Header: reloj + fecha actualizan cada segundo         │
+│  [ ] Header: ● verde "En tiempo real" (connection status)  │
+│  [ ] Header: click en user muestra dropdown con 3 perfiles │
+│  [ ] Header: campana muestra badge si hay alertas          │
 │  [ ] Hay movimientos apareciendo en "Últimos movimientos" │
 │  [ ] Los cocedores cambian de estado (azul, verde, amber)  │
+│  [ ] Render 3D: cocedores visibles en perspectiva          │
 │  [ ] No hay errores 404 en la consola del navegador        │
 │  [ ] La carpeta logs/ se crea y tiene archivos .log      │
 └─────────────────────────────────────────────────────────────┘

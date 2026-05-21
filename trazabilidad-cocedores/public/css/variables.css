@@ -1,47 +1,48 @@
 /* ──────────────────────────────────────────────────────────────────────────
-   Tokens — paleta PINSA + Arctic Control Room (heredada de cocedores-pinsa)
-   + tokens nuevos para estados de cocedor y stepper de trazabilidad.
+   Tokens — PINSA Industrial Dashboard
+   Tema: Blanco + Azul corporativo PINSA
    ────────────────────────────────────────────────────────────────────────── */
 
 :root {
   /* Header height */
   --h-header: 56px;
 
-  /* Fondos */
-  --c-bg:        #0B1825;
-  --c-surface:   #14283F;
-  --c-surface-2: #1B3553;
-  --c-surface-3: #1F3D5E;
-
-  /* PINSA brand */
+  /* PINSA brand — azul dominante */
   --c-blue:      #00539F;
   --c-blue-2:    #2E80D8;
+  --c-blue-3:    #5BB8F5;
+
+  /* Fondos — blanco off-white (no blanco puro) */
+  --c-bg:        #F4F6F8;
+  --c-surface:   #FFFFFF;
+  --c-surface-2: #EDF1F5;
+  --c-surface-3: #E2E8F0;
+
+  /* Texto — oscuro sobre claro */
+  --c-ice:       #0F172A;
+  --c-text-mid:  #475569;
+  --c-text-dim:  #64748B;
 
   /* Plata + gris */
-  --c-silver:    #8B9DAE;
-  --c-steel:     #5A6B7A;
-  --c-steel-dim: #3B4856;
+  --c-silver:    #94A3B8;
+  --c-steel:     #64748B;
+  --c-steel-dim: #CBD5E1;
 
-  /* Texto */
-  --c-ice:       #E3F1FF;
-  --c-text-dim:  #8B9DAE;
-  --c-text-mid:  #C0D2E3;
-
-  /* Acentos funcionales */
+  /* Acentos funcionales — se mantienen para semántica de estado */
   --c-green:     #00C896;
   --c-green-2:   #1FE0AC;
   --c-red:       #FF4B4B;
   --c-amber:     #F5A623;
   --c-cyan:      #5BB8F5;
 
-  /* Bordes */
-  --c-border:     rgba(0,83,159,0.30);
-  --c-border-hi:  rgba(46,128,216,0.55);
-  --c-border-dim: rgba(139,157,174,0.18);
+  /* Bordes — azul muy sutil */
+  --c-border:    rgba(0,83,159,0.12);
+  --c-border-hi: rgba(46,128,216,0.35);
+  --c-border-dim:rgba(148,163,184,0.25);
 
-  /* Sombras */
-  --shadow-panel: 0 2px 10px rgba(0,0,0,0.40), inset 0 1px 0 rgba(46,128,216,0.10);
-  --shadow-card:  0 4px 16px rgba(0,0,0,0.45);
+  /* Sombras — suaves, no agresivas */
+  --shadow-panel: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
+  --shadow-card:  0 4px 12px rgba(0,0,0,0.08);
 
   /* Tipografía */
   --font-ui:    'Rajdhani', 'Barlow Condensed', system-ui, sans-serif;
@@ -56,12 +57,12 @@
   --r-md: 6px;
   --r-lg: 10px;
 
-  /* Estados de cocedor — tokens semánticos nuevos */
+  /* Estados de cocedor — tokens semánticos */
   --c-status-proceso: var(--c-blue-2);
   --c-status-listo:   var(--c-green);
   --c-status-espera:  var(--c-amber);
   --c-status-mtto:    var(--c-silver);
-  --c-status-desact:  var(--c-steel-dim);
+  --c-status-desact: var(--c-steel-dim);
 
   /* Stepper trazabilidad */
   --c-step-done:    var(--c-green);
@@ -84,12 +85,7 @@ html, body {
 }
 
 body {
-  background:
-    radial-gradient(ellipse 1200px 600px at 50% -200px, rgba(0,83,159,0.20), transparent 70%),
-    radial-gradient(ellipse 800px 400px at 90% 100%, rgba(0,200,150,0.08), transparent 70%),
-    var(--c-bg);
   min-height: 100vh;
-  overflow: hidden;
 }
 
 button { font-family: inherit; cursor: pointer; }
@@ -97,19 +93,20 @@ ul     { list-style: none; padding: 0; margin: 0; }
 a      { color: inherit; text-decoration: none; }
 
 :focus-visible {
-  outline: 2px solid var(--c-cyan);
+  outline: 2px solid var(--c-blue-2);
   outline-offset: 2px;
   border-radius: 3px;
 }
 button:focus-visible, a:focus-visible {
-  outline-color: var(--c-cyan);
-  box-shadow: 0 0 0 4px rgba(91,184,245,0.18);
+  outline-color: var(--c-blue-2);
+  box-shadow: 0 0 0 4px rgba(46,128,216,0.18);
 }
 
-::-webkit-scrollbar           { width: 8px; height: 8px; }
+/* Scrollbar */
+::-webkit-scrollbar           { width: 7px; height: 7px; }
 ::-webkit-scrollbar-track     { background: transparent; }
-::-webkit-scrollbar-thumb     { background: rgba(139,157,174,0.30); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(139,157,174,0.50); }
+::-webkit-scrollbar-thumb     { background: rgba(148,163,184,0.40); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.60); }
 
 /* Panel base */
 .panel {
@@ -148,6 +145,22 @@ button:focus-visible, a:focus-visible {
   text-transform: uppercase;
 }
 
+.panel-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: var(--c-red);
+  color: white;
+  font-family: var(--font-data);
+  font-weight: 600;
+  font-size: 0.72rem;
+  border-radius: var(--r-sm);
+  margin-left: 6px;
+}
+
 /* Estado de conexión genérico */
 .connection-dot {
   display: inline-block;
@@ -165,6 +178,36 @@ button:focus-visible, a:focus-visible {
   50%      { transform: scale(1.25); opacity: 0.7; }
 }
 
+/* Panel tabs */
+.panel-tabs {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+.panel-tab {
+  background: transparent;
+  border: 1px solid var(--c-border-dim);
+  color: var(--c-text-dim);
+  padding: 4px 10px;
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 150ms;
+}
+.panel-tab:hover { color: var(--c-blue-2); border-color: var(--c-border-hi); }
+.panel-tab.active {
+  color: var(--c-ice);
+  background: rgba(0,83,159,0.08);
+  border-color: var(--c-border-hi);
+}
+
+/* SR-only */
 .sr-only {
   position: absolute; width: 1px; height: 1px; margin: -1px;
   padding: 0; border: 0; clip: rect(0 0 0 0); overflow: hidden;

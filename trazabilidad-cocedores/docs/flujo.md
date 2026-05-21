@@ -562,7 +562,80 @@ Eventos generados durante este ciclo:
 
 ---
 
-## 10. Glosario de flujos
+## 11. Flujo de cambio de usuario
+
+El header incluye un dropdown de usuario que permite cambiar entre 3 perfiles predefinidos (LUIS R., MARIA G., CARLOS T.).
+
+```
+┌──────────────┐     click      ┌─────────────────┐
+│ headerUser   │ ─────────────> │  userMenu.open() │
+│ (avatar+name)│                │  toggle .open    │
+└──────────────┘                └────────┬────────┘
+                                         │
+                                    click en perfil
+                                         │
+                                         ▼
+                                ┌─────────────────┐
+                                │ setUsuarioActual │
+                                │ - actualiza DOM  │
+                                │ - localStorage   │
+                                │ - dispatch event │
+                                └────────┬────────┘
+                                         │
+                                         ▼
+                                ┌─────────────────┐
+                                │ 'usuario-        │
+                                │  cambiado' event │
+                                │  en window       │
+                                └─────────────────┘
+```
+
+**Persistencia**: El usuario seleccionado se guarda en `localStorage('pinsa_usuario')` y se restaura al recargar la página.
+
+**Evento**: Otros módulos pueden escuchar el cambio:
+
+```js
+window.addEventListener('usuario-cambiado', (e) => {
+  console.log(e.detail.usuario); // 'LUIS R.' | 'MARIA G.' | 'CARLOS T.'
+});
+```
+
+---
+
+## 12. Flujo de connection status
+
+El indicador de conexión SSE en el header refleja el estado de la conexión en tiempo real:
+
+```
+┌──────────────┐     EventSource      ┌─────────────────┐
+│  stream.js   │ ───────────────────> │  SSE /api/stream │
+│  (frontend)  │                      │  (server)        │
+└──────┬───────┘                      └─────────────────┘
+       │
+       │ onopen / onerror / retry
+       ▼
+┌──────────────────┐
+│ headerClock.js   │
+│ setConnStatus()  │
+└──────┬───────────┘
+       │
+       ▼
+┌─────────────────────────────────────────┐
+│  ● ok         → verde, "En tiempo real" │
+│  ● connecting → ámbar, "Conectando…"    │
+│  ● err        → rojo, "Sin conexión"    │
+└─────────────────────────────────────────┘
+```
+
+| Estado | Dot | Texto | Cuándo |
+|--------|-----|-------|--------|
+| `ok` | ● verde (pulso) | "En tiempo real" | Conexión SSE activa, datos llegando |
+| `connecting` | ● ámbar | "Conectando…" | Reconectando tras desconexión |
+| `err` | ● rojo | "Sin conexión" | Falla después de múltiples reintentos |
+
+---
+
+## 13. Glosario de flujos
 
 | Término | Significado en este contexto |
 |---------|------------------------------|

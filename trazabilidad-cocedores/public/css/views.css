@@ -51,8 +51,8 @@
 /* Botones */
 .btn {
   background: transparent;
-  border: 1px solid var(--c-border-hi);
-  color: var(--c-cyan);
+  border: 1px solid var(--c-blue);
+  color: var(--c-blue);
   font-family: var(--font-ui);
   font-size: 0.72rem;
   letter-spacing: 1.2px;
@@ -63,21 +63,18 @@
   cursor: pointer;
   transition: all 150ms;
 }
-.btn:hover { background: rgba(46,128,216,0.18); color: var(--c-ice); }
-.btn.primary { background: var(--c-blue); color: white; border-color: var(--c-blue-2); }
+.btn:hover { background: var(--c-blue); color: white; }
+.btn.primary { background: var(--c-blue); color: white; border-color: var(--c-blue); }
 .btn.primary:hover { background: var(--c-blue-2); }
 .btn.danger { color: var(--c-red); border-color: var(--c-red); }
-.btn.danger:hover { background: rgba(255,75,75,0.10); }
-.btn.subtle {
-  color: var(--c-text-dim);
-  border-color: var(--c-border-dim);
-}
-.btn.subtle:hover { color: var(--c-ice); border-color: var(--c-border-hi); }
+.btn.danger:hover { background: var(--c-red); color: white; }
+.btn.subtle { color: var(--c-steel); border-color: var(--c-steel-dim); }
+.btn.subtle:hover { background: var(--c-surface-3); color: var(--c-ice); border-color: var(--c-steel); }
 
 .btn-back {
   background: transparent;
-  border: 1px solid var(--c-border-hi);
-  color: var(--c-cyan);
+  border: 1px solid var(--c-blue);
+  color: var(--c-blue);
   font-family: var(--font-ui);
   font-size: 0.74rem;
   letter-spacing: 1.4px;
@@ -89,8 +86,8 @@
   transition: all 150ms;
 }
 .btn-back:hover {
-  background: rgba(46,128,216,0.18);
-  color: var(--c-ice);
+  background: var(--c-blue);
+  color: white;
 }
 
 /* Inputs */
@@ -105,7 +102,7 @@
   outline: none;
   transition: border-color 150ms;
 }
-.input:focus { border-color: var(--c-cyan); }
+.input:focus { border-color: var(--c-blue); }
 .input::placeholder { color: var(--c-text-dim); }
 
 .select {
@@ -131,8 +128,8 @@
 }
 .tab {
   background: transparent;
-  border: 1px solid var(--c-border-dim);
-  color: var(--c-text-dim);
+  border: 1px solid var(--c-steel-dim);
+  color: var(--c-steel);
   padding: 5px 12px;
   font-family: var(--font-ui);
   font-size: 0.68rem;
@@ -143,11 +140,11 @@
   cursor: pointer;
   transition: all 150ms;
 }
-.tab:hover { color: var(--c-cyan); border-color: var(--c-border-hi); }
+.tab:hover { color: var(--c-blue); border-color: var(--c-steel); }
 .tab.active {
-  color: var(--c-ice);
-  background: rgba(46,128,216,0.18);
-  border-color: var(--c-border-hi);
+  color: var(--c-surface);
+  background: var(--c-blue);
+  border-color: var(--c-blue);
 }
 
 /* Tablas */
@@ -175,9 +172,9 @@
 .table tbody td {
   padding: 8px 12px;
   border-bottom: 1px solid var(--c-border-dim);
-  color: var(--c-text-mid);
+  color: var(--c-steel);
 }
-.table tbody tr:hover td { background: rgba(46,128,216,0.05); }
+.table tbody tr:hover td { background: rgba(0,83,159,0.04); }
 .table .col-mono { font-family: var(--font-data); color: var(--c-ice); }
 .table .col-dim  { color: var(--c-text-dim); font-size: 0.72rem; }
 
@@ -208,7 +205,7 @@
 }
 .badge[data-sev="high"] { color: var(--c-red);   background: rgba(255,75,75,0.12); }
 .badge[data-sev="med"]  { color: var(--c-amber); background: rgba(245,166,35,0.12); }
-.badge[data-sev="low"]  { color: var(--c-cyan);  background: rgba(91,184,245,0.12); }
+.badge[data-sev="low"]  { color: var(--c-blue);  background: rgba(0,83,159,0.10); }
 
 .badge[data-state="EN_PROCESO"]    { color: var(--c-status-proceso); background: rgba(46,128,216,0.10); }
 .badge[data-state="LISTO"]         { color: var(--c-status-listo);   background: rgba(0,200,150,0.10); }

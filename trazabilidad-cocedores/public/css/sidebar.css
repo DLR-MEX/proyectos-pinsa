@@ -1,4 +1,7 @@
-/* Sidebar 168 px con 7 items + footer logo PINSA mini + versión */
+/* ──────────────────────────────────────────────────────────────────────────
+   Sidebar — Tema PINSA Industrial (claro)
+   168px + 7 items + footer logo PINSA mini + versión
+   ────────────────────────────────────────────────────────────────────────── */
 
 .app-shell {
   display: grid;
@@ -8,7 +11,7 @@
 }
 
 .sidebar {
-  background: linear-gradient(180deg, var(--c-surface) 0%, var(--c-surface) 80%, var(--c-bg) 100%);
+  background: linear-gradient(180deg, var(--c-surface-2) 0%, var(--c-surface-2) 80%, var(--c-bg) 100%);
   border-right: 1px solid var(--c-border);
   display: flex;
   flex-direction: column;
@@ -40,13 +43,13 @@
 }
 
 .sidebar-item:hover {
-  background: rgba(46,128,216,0.08);
+  background: rgba(0,83,159,0.06);
   color: var(--c-ice);
 }
 
 .sidebar-item.active {
-  background: linear-gradient(90deg, rgba(46,128,216,0.18) 0%, rgba(46,128,216,0.02) 100%);
-  color: var(--c-ice);
+  background: linear-gradient(90deg, rgba(0,83,159,0.10) 0%, rgba(0,83,159,0.02) 100%);
+  color: var(--c-blue);
 }
 
 .sidebar-item.active::before {
@@ -54,8 +57,8 @@
   position: absolute;
   left: 0; top: 6px; bottom: 6px;
   width: 3px;
-  background: var(--c-blue-2);
-  box-shadow: 0 0 8px var(--c-blue-2);
+  background: var(--c-blue);
+  box-shadow: 0 0 8px rgba(0,83,159,0.40);
   border-radius: 0 2px 2px 0;
 }
 
@@ -115,7 +118,7 @@
   color: var(--c-text-dim);
 }
 .v-tag strong {
-  color: var(--c-ice);
+  color: var(--c-text-mid);
   font-weight: 600;
 }
 

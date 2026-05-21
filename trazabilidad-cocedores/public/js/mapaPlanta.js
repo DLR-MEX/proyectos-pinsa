@@ -24,14 +24,14 @@ export function renderMapaPlanta(snapshot, selectedId) {
     const cx = padX + i * stepX;
     const r  = c.id === selectedId ? 11 : 9;
     const fill = COLOR[c.status] ?? '#5A6B7A';
-    const stroke = c.id === selectedId ? '#E3F1FF' : 'rgba(11,24,37,0.7)';
+    const stroke = c.id === selectedId ? '#FFFFFF' : 'rgba(100,116,139,0.7)';
     const sw     = c.id === selectedId ? 1.6 : 1;
     return `
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>
       <text x="${cx}" y="${cy + 3}" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="9" font-weight="700" fill="#0B1825">${c.pos}</text>
+            font-size="9" font-weight="700" fill="#0F172A">${c.pos}</text>
       <text x="${cx}" y="${cy + 22}" text-anchor="middle" font-family="Rajdhani, sans-serif"
-            font-size="8" letter-spacing="0.5" fill="#8B9DAE">cs${String(c.pos).padStart(2,'0')}</text>
+            font-size="8" letter-spacing="0.5" fill="#64748B">cs${String(c.pos).padStart(2,'0')}</text>
     `;
   }).join('');
 

@@ -5,7 +5,7 @@
 
 .detalle-grid {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr 300px;
   gap: var(--gap-grid);
   flex: 1;
   min-height: 0;
@@ -14,9 +14,7 @@
 
 .detalle-stage {
   position: relative;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 10%, rgba(0,83,159,0.18), transparent 70%),
-    linear-gradient(180deg, #0E1C2D 0%, #060E18 100%);
+  background: var(--c-bg);
   border: 1px solid var(--c-border);
   border-radius: var(--r-md);
   overflow: hidden;
@@ -40,7 +38,7 @@
 .readout-card {
   min-width: 110px;
   padding: 8px 14px;
-  background: rgba(11,24,37,0.78);
+  background: rgba(255,255,255,0.92);
   border: 1px solid var(--c-border-hi);
   border-radius: var(--r-md);
   backdrop-filter: blur(6px);
@@ -63,8 +61,8 @@
   letter-spacing: 0.5px;
   line-height: 1.05;
 }
-.readout-value.is-hot { color: var(--c-amber); text-shadow: 0 0 10px rgba(245,166,35,0.45); }
-.readout-value.is-ok  { color: var(--c-green); text-shadow: 0 0 10px rgba(0,200,150,0.45); }
+.readout-value.is-hot { color: var(--c-amber); }
+.readout-value.is-ok  { color: var(--c-green); }
 .readout-sub {
   font-family: var(--font-data);
   font-size: 0.66rem;
@@ -87,11 +85,11 @@
 }
 .detalle-hero-3d {
   width: 100%;
-  height: 260px;
+  height: 420px;
   position: relative;
   border-radius: var(--r-md);
   overflow: hidden;
-  background: linear-gradient(180deg, #0E1C2D 0%, #06101A 100%);
+  background: var(--c-surface-2);
   border: 1px solid var(--c-border-dim);
 }
 .detalle-hero-3d canvas {
@@ -230,7 +228,7 @@
   border: 1px solid var(--c-border-hi);
   border-radius: var(--r-sm);
   font-size: 0.78rem;
-  color: var(--c-cyan);
+  color: var(--c-blue);
 }
 
 /* DL info */
@@ -278,7 +276,7 @@
   height: 8px;
   border-radius: 3px;
   background: linear-gradient(90deg,
-    var(--c-cyan) 0%, var(--c-green) 50%, var(--c-amber) 80%, var(--c-red) 100%);
+    var(--c-blue) 0%, var(--c-green) 50%, var(--c-amber) 80%, var(--c-red) 100%);
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.50);
   margin-bottom: 12px;
 }
